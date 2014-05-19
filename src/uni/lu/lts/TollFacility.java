@@ -8,6 +8,6 @@ package uni.lu.lts;
  *
  * @author asiron
  */
-class TollFacility {
+public class TollFacility {
     
 }
