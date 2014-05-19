@@ -8,6 +8,6 @@ package uni.lu.lts.facility;
  *
  * @author asiron
  */
-public class SensorReadingError {
-    
+public enum ErrorType {
+    UNKNOWNCOUNTRY, TOOFASTTORECORD
 }

@@ -4,6 +4,8 @@
  */
 package uni.lu.lts.facility;
 
+import uni.lu.lts.facility.sensor.SensorReadingError;
+import uni.lu.lts.facility.sensor.Sensor;
 import java.util.Dictionary;
 import java.util.List;
 import uni.lu.lts.core.TollSystemRecord;

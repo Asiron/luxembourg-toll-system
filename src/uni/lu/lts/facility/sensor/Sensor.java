@@ -2,12 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uni.lu.lts.facility;
+package uni.lu.lts.facility.sensor;
 
 import java.sql.Timestamp;
 import java.util.Queue;
-import uni.lu.lts.util.Pair;
+import java.util.Set;
+import uni.lu.lts.util.ImmutablePair;
 import uni.lu.lts.vehicle.Vehicle;
+import uni.lu.lts.vehicle.VehicleType;
 
 /**
  *
@@ -17,8 +19,27 @@ public class Sensor {
     
     private Integer sensorID;
     private float maxVehicleHeight;
-    private Boolean isActive;
-    private Queue<Pair<Vehicle, Timestamp>> passedByVehicleBuffer;
+    private Boolean active;
+    private Queue<ImmutablePair<Vehicle, Timestamp>> passedByVehicleBuffer;
+    private Set<VehicleType> allowedTypes;
+
+    /**
+     * Get the value of allowedTypes
+     *
+     * @return the value of allowedTypes
+     */
+    public Set<VehicleType> getAllowedTypes() {
+        return allowedTypes;
+    }
+
+    /**
+     * Set the value of allowedTypes
+     *
+     * @param allowedTypes new value of allowedTypes
+     */
+    public void setAllowedTypes(Set<VehicleType> allowedTypes) {
+        this.allowedTypes = allowedTypes;
+    }
 
 
     /**
@@ -26,8 +47,8 @@ public class Sensor {
      *
      * @return the value of isActive
      */
-    public Boolean getIsActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
     /**
@@ -35,8 +56,8 @@ public class Sensor {
      *
      * @param isActive new value of isActive
      */
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     /**

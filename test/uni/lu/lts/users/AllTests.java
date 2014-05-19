@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uni.lu.lts;
+package uni.lu.lts.users;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
  * @author asiron
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({})
+@Suite.SuiteClasses({AccountTests.class})
 public class AllTests {
 
     @BeforeClass
