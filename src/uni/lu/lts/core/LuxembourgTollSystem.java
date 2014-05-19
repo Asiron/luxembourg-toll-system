@@ -4,8 +4,8 @@
  */
 package uni.lu.lts.core;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import uni.lu.lts.facility.Section;
 
 /**
@@ -14,10 +14,10 @@ import uni.lu.lts.facility.Section;
  */
 public class LuxembourgTollSystem {
 
-    private Dictionary<String, Section> sections = null;
+    private Map<String, Section> sections = null;
 
     public LuxembourgTollSystem() {
-        this.sections = new Hashtable<String, Section>();
+        this.sections = new HashMap<String, Section>();
     }
 
     
@@ -27,7 +27,7 @@ public class LuxembourgTollSystem {
      *
      * @return the value of sections
      */
-    public Dictionary<String, Section> getSections() {
+    public Map<String, Section> getSections() {
         return sections;
     }
 
@@ -36,7 +36,7 @@ public class LuxembourgTollSystem {
      *
      * @param sections new value of sections
      */
-    public void setSections(Dictionary<String, Section> sections) {
+    public void setSections(Map<String, Section> sections) {
         this.sections = sections;
     }
 }

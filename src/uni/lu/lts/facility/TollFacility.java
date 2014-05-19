@@ -4,11 +4,13 @@
  */
 package uni.lu.lts.facility;
 
-import uni.lu.lts.facility.sensor.SensorReadingError;
-import uni.lu.lts.facility.sensor.Sensor;
-import java.util.Dictionary;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import uni.lu.lts.core.TollSystemRecord;
+import uni.lu.lts.facility.sensor.Sensor;
+import uni.lu.lts.facility.sensor.SensorReadingError;
 
 /**
  *
@@ -18,9 +20,17 @@ public class TollFacility {
     
     private Section section;
     private String facilityID;
-    private Dictionary<Integer, Sensor> sensors;
+    private Map<Integer, Sensor> sensors;
     private List<TollSystemRecord> records;
     private List<SensorReadingError> errorList;
+
+    public TollFacility(Section section, String facilityID) {
+        this.section    = section;
+        this.facilityID = facilityID;
+        this.sensors    = new HashMap<Integer, Sensor>();
+        this.records    = new ArrayList<TollSystemRecord>();
+        this.errorList  = new ArrayList<SensorReadingError>(); 
+    }
 
     /**
      * Get the value of errorList
@@ -63,7 +73,7 @@ public class TollFacility {
      *
      * @return the value of sensors
      */
-    public Dictionary<Integer, Sensor> getSensors() {
+    public Map<Integer, Sensor> getSensors() {
         return sensors;
     }
 
@@ -72,7 +82,7 @@ public class TollFacility {
      *
      * @param sensors new value of sensors
      */
-    public void setSensors(Dictionary<Integer, Sensor> sensors) {
+    public void setSensors(Map<Integer, Sensor> sensors) {
         this.sensors = sensors;
     }
 

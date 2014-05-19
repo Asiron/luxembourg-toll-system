@@ -54,6 +54,6 @@ public class AccountTests {
         actual = user.checkPassword("bullshit");
         expected = false;
         
-        Assert.assertEquals("Passwords don't match", expected, actual);       
+        Assert.assertEquals("Passwords don't match", expected, actual);   
     }
 }

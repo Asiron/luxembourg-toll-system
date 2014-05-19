@@ -6,7 +6,8 @@ package uni.lu.lts.vehicle;
  */
 public class Motorbike extends Vehicle{
 
-    Motorbike(VehicleType type, String numberPlate, String country, float height) {
+    Motorbike(VehicleType type, String numberPlate, CountryCode country, float height) {
         super(type, numberPlate, country, height);
     }
+    
 }

@@ -5,7 +5,6 @@
 package uni.lu.lts.facility.sensor;
 
 import java.sql.Timestamp;
-import uni.lu.lts.facility.ErrorType;
 
 /**
  *

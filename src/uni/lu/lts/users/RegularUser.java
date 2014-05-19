@@ -23,7 +23,7 @@ public class RegularUser extends Account implements VehicleOwner{
     }
     
     @Override
-    public boolean registerVehicle(VehicleType type, String numberPlate, String country, float height) {
+    public boolean registerVehicle(VehicleType type, String numberPlate, CountryCode country, float height) {
         Vehicle vehicle = VehicleFactory.createVehicle(type, numberPlate, country, height);
         if (vehicle instanceof SpecialVehicle) {
             System.out.print("Unable to register Special Vehicle for unprivileged user");

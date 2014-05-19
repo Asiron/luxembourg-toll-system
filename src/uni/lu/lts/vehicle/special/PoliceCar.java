@@ -12,7 +12,7 @@ import uni.lu.lts.vehicle.VehicleType;
  */
 public class PoliceCar extends SpecialVehicle{
 
-    public PoliceCar(VehicleType type, String numberPlate, String country, float height) {
+    public PoliceCar(VehicleType type, String numberPlate, CountryCode country, float height) {
         super(type, numberPlate, country, height);
     }
     

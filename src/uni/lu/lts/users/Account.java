@@ -19,7 +19,7 @@ public class Account {
     protected Set<Permission> permissions;
     
     public Account(String username, String password) {
-       
+    
         this.username = username;
         this.salt     = new byte[32];
         final Random r = new SecureRandom();

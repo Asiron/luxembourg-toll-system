@@ -6,7 +6,7 @@ package uni.lu.lts.vehicle;
  */
 public class Bus extends Vehicle{
 
-    public Bus(VehicleType vehicleType, String numberPlate, String country, float height) {
+    public Bus(VehicleType vehicleType, String numberPlate, CountryCode country, float height) {
         super(vehicleType, numberPlate, country, height);
     }
     

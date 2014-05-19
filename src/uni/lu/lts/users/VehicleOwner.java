@@ -12,6 +12,6 @@ import uni.lu.lts.vehicle.VehicleType;
  * @author asiron
  */
 public interface VehicleOwner {    
-    public boolean registerVehicle(VehicleType type, String numberPlate, String country, float height);
+    public boolean registerVehicle(VehicleType type, String numberPlate, CountryCode country, float height);
     public Vehicle getVehicle();
 }

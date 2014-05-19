@@ -4,8 +4,8 @@
  */
 package uni.lu.lts.facility;
 
-import uni.lu.lts.facility.TollFacility;
-import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -18,14 +18,23 @@ public class Section {
     private float truckPrice;
     private float busPrice;
     private String name;
-    private Dictionary<String, TollFacility> tollFacilities;
+    private Map<String, TollFacility> tollFacilities;
+
+    public Section(float carPrice, float motorbikePrice, float truckPrice, float busPrice, String name) {
+        this.carPrice       = carPrice;
+        this.motorbikePrice = motorbikePrice;
+        this.truckPrice     = truckPrice;
+        this.busPrice       = busPrice;
+        this.name           = name;
+        this.tollFacilities = new HashMap<String, TollFacility>();
+    }
 
     /**
      * Get the value of tollFacilities
      *
      * @return the value of tollFacilities
      */
-    public Dictionary<String, TollFacility> getTollFacilities() {
+    public Map<String, TollFacility> getTollFacilities() {
         return tollFacilities;
     }
 
@@ -34,8 +43,9 @@ public class Section {
      *
      * @param tollFacilities new value of tollFacilities
      */
-    public void setTollFacilities(Dictionary<String, TollFacility> tollFacilities) {
-        this.tollFacilities = tollFacilities;
+    public void addTollFacilities(String facilityID) {
+        TollFacility facility = new TollFacility(this, facilityID);
+        tollFacilities.put(facilityID, facility);
     }
 
     /**

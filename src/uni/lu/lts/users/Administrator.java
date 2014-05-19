@@ -10,14 +10,11 @@ package uni.lu.lts.users;
  */
 public class Administrator extends Account{
 
-    
-    
     public Administrator(String username, String password) {
         super(username, password);
         permissions.add(Permission.READALL);
         permissions.add(Permission.MODIFYACCOUNTS);
     }
-    
     
     
 }

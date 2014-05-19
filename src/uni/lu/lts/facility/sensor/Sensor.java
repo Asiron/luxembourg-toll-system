@@ -4,7 +4,8 @@
  */
 package uni.lu.lts.facility.sensor;
 
-import java.sql.Timestamp;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 import uni.lu.lts.util.ImmutablePair;
@@ -20,8 +21,16 @@ public class Sensor {
     private Integer sensorID;
     private float maxVehicleHeight;
     private Boolean active;
-    private Queue<ImmutablePair<Vehicle, Timestamp>> passedByVehicleBuffer;
+    private Queue<ImmutablePair<Vehicle, Date>> passedByVehicleBuffer;
     private Set<VehicleType> allowedTypes;
+
+    public Sensor(Integer sensorID, float maxVehicleHeight, Boolean active, Set<VehicleType> allowedTypes) {
+        this.sensorID = sensorID;
+        this.active = active;
+        this.maxVehicleHeight = maxVehicleHeight;
+        this.allowedTypes = allowedTypes;
+        this.passedByVehicleBuffer = new LinkedList<>();
+    }
 
     /**
      * Get the value of allowedTypes
@@ -31,7 +40,7 @@ public class Sensor {
     public Set<VehicleType> getAllowedTypes() {
         return allowedTypes;
     }
-
+    
     /**
      * Set the value of allowedTypes
      *
@@ -41,6 +50,23 @@ public class Sensor {
         this.allowedTypes = allowedTypes;
     }
 
+    /**
+     * Add allowed type of vehicle to the set of allowed types
+     * 
+     * @param vehicleType the value of added allowed type
+     */
+    public void addAllowedType(VehicleType vehicleType) {
+        allowedTypes.add(vehicleType);
+    }
+    
+    /**
+     * Remove allowed type of vehicle from the set of allowed types
+     * 
+     * @param vehicleType the value of added allowed type
+     */
+    public boolean removeAllowedType(VehicleType vehicleType) {
+        return allowedTypes.add(vehicleType);
+    }
 
     /**
      * Get the value of isActive
@@ -96,4 +122,15 @@ public class Sensor {
         this.sensorID = sensorID;
     }
 
+    /**
+     * If sensor is active then put the measurement into buffer
+     * delegate testing for errors to TollFacility, since sensor is lightweight HW object
+     * @param vehicle vehicle passing by
+     */
+    public void registerPassingByVehicle(Vehicle vehicle) {
+        if (isActive()) {
+            ImmutablePair<Vehicle, Date> record = new ImmutablePair<>(vehicle, new Date());
+            this.passedByVehicleBuffer.add(record);  
+        }
+    }
 }

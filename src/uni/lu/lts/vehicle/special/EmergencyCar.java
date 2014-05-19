@@ -4,6 +4,7 @@
  */
 package uni.lu.lts.vehicle.special;
 
+import uni.lu.lts.vehicle.CountryCode;
 import uni.lu.lts.vehicle.VehicleType;
 
 /**
@@ -12,7 +13,7 @@ import uni.lu.lts.vehicle.VehicleType;
  */
 public class EmergencyCar extends SpecialVehicle {
 
-    public EmergencyCar(VehicleType type, String numberPlate, String country, float height) {
+    public EmergencyCar(VehicleType type, String numberPlate, CountryCode country, float height) {
         super(type, numberPlate, country, height);
     }
     

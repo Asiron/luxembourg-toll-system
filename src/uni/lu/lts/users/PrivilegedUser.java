@@ -4,6 +4,7 @@
  */
 package uni.lu.lts.users;
 
+import uni.lu.lts.vehicle.CountryCode;
 import uni.lu.lts.vehicle.Vehicle;
 import uni.lu.lts.vehicle.VehicleFactory;
 import uni.lu.lts.vehicle.VehicleType;
@@ -23,7 +24,7 @@ public class PrivilegedUser extends Account implements VehicleOwner{
     }
 
     @Override
-    public boolean registerVehicle(VehicleType type, String numberPlate, String country, float height) {
+    public boolean registerVehicle(VehicleType type, String numberPlate, CountryCode country, float height) {
         Vehicle vehicle = VehicleFactory.createVehicle(type, numberPlate, country, height);
         if (!(vehicle instanceof SpecialVehicle)) {
             System.out.print("Unable to register not Special Vehicle for privileged user");

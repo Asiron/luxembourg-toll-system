@@ -15,7 +15,7 @@ import uni.lu.lts.vehicle.VehicleType;
 
 public class SpecialVehicle extends Vehicle {
 
-    public SpecialVehicle(VehicleType vehicleType, String numberPlate, String country, float size) {
+    public SpecialVehicle(VehicleType vehicleType, String numberPlate, CountryCode country, float size) {
         super(vehicleType, numberPlate, country, size);
     }
     
