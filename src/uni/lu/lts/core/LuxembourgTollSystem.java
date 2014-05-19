@@ -5,6 +5,7 @@
 package uni.lu.lts.core;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 import uni.lu.lts.facility.Section;
 
 /**
@@ -13,8 +14,14 @@ import uni.lu.lts.facility.Section;
  */
 public class LuxembourgTollSystem {
 
-        private Dictionary<String, Section> sections;
+    private Dictionary<String, Section> sections = null;
 
+    public LuxembourgTollSystem() {
+        this.sections = new Hashtable<String, Section>();
+    }
+
+    
+    
     /**
      * Get the value of sections
      *
@@ -31,13 +38,5 @@ public class LuxembourgTollSystem {
      */
     public void setSections(Dictionary<String, Section> sections) {
         this.sections = sections;
-    }
-
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
     }
 }
