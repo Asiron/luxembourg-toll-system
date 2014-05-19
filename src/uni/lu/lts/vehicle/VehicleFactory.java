@@ -18,7 +18,7 @@ public class VehicleFactory {
        Vehicle returnVal = null;
         switch (type) {
             case MOTORBIKE:
-                returnVal = new MotorBike(type, numberPlate, country, height);
+                returnVal = new Motorbike(type, numberPlate, country, height);
                 break;
             case BUS:
                 returnVal = new Bus(type, numberPlate, country, height);

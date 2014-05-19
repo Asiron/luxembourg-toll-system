@@ -1,6 +1,6 @@
 package uni.lu.lts.vehicle;
 
-import uni.lu.lts.TollFacility;
+import uni.lu.lts.facility.TollFacility;
 
 public class Vehicle {
 

@@ -1,4 +1,4 @@
-package uni.lu.lts;
+package uni.lu.lts.core;
 
 public abstract class Authenticated {
 	private String username;		// username of the user which he uses to log into the system

@@ -10,7 +10,7 @@ import uni.lu.lts.vehicle.VehicleType;
  *
  * @author asiron
  */
-public class EmergencyCar extends Special {
+public class EmergencyCar extends SpecialVehicle {
 
     public EmergencyCar(VehicleType type, String numberPlate, String country, float height) {
         super(type, numberPlate, country, height);

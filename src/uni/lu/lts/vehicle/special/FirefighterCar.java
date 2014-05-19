@@ -10,7 +10,7 @@ import uni.lu.lts.vehicle.VehicleType;
  *
  * @author asiron
  */
-public class FirefighterCar extends Special {
+public class FirefighterCar extends SpecialVehicle {
 
     public FirefighterCar(VehicleType vehicleType, String numberPlate, String country, float size) {
         super(vehicleType, numberPlate, country, size);
