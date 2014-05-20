@@ -4,6 +4,8 @@
  */
 package uni.lu.lts.users;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -42,16 +44,16 @@ public class LTSTests {
     //
     @Test
     public void testLogin() {
-        LuxembourgTollSystem lts = new LuxembourgTollSystem();
         
-        Boolean expected = true;
-        Boolean actual   = lts.login("root", "root");
+        Lock ltsLock = new ReentrantLock(true);
+        LuxembourgTollSystem lts = new LuxembourgTollSystem(ltsLock);
         
-        Assert.assertEquals("Testing logining in with root", expected, actual);
+        Account actual   = lts.login("root", "root");
+                
+        Assert.assertTrue(actual instanceof Root);
         
-        expected = false;
         actual   = lts.login("root", "lol");
         
-        Assert.assertEquals("Testing logining in with root", expected, actual);
+        Assert.assertTrue(!(actual instanceof Root));
     }
 }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package uni.lu.lts.core;
 
 import java.util.Scanner;
@@ -18,5 +14,4 @@ public class Parser {
         scanner = new Scanner(System.in);
     }
         
-    
 }

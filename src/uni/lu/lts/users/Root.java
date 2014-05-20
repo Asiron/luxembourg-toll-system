@@ -10,9 +10,10 @@ package uni.lu.lts.users;
  */
 public class Root extends Account {
 
-    public Root() {
-        super("root", "root");
-        permissions.add(Permission.MODIFYACCOUNTS);
+    public Root(AccountType type, String username, String password) {
+        super(type, username, password);
         permissions.add(Permission.READALL);
+        permissions.add(Permission.MODIFYACCOUNTS);
     }
+    
 }

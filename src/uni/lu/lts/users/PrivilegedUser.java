@@ -17,11 +17,12 @@ import uni.lu.lts.vehicle.special.SpecialVehicle;
 public class PrivilegedUser extends Account implements VehicleOwner{
 
     private Vehicle registeredVehicle = null;
-    
-    public PrivilegedUser(String username, String password) {
-        super(username, password);
+
+    public PrivilegedUser(AccountType type, String username, String password) {
+        super(type, username, password);
         permissions.add(Permission.READALL);
     }
+    
 
     @Override
     public boolean registerVehicle(VehicleType type, String numberPlate, CountryCode country, float height) {

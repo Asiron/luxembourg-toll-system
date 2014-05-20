@@ -16,7 +16,7 @@ import uni.lu.lts.vehicle.special.PoliceCar;
 public class VehicleFactory {
     
     public static Vehicle createVehicle(VehicleType type, String numberPlate, CountryCode country, float height) {
-       Vehicle returnVal = null;
+        Vehicle returnVal = null;
         switch (type) {
             case MOTORBIKE:
                 returnVal = new Motorbike(type, numberPlate, country, height);

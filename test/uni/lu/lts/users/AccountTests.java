@@ -10,6 +10,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uni.lu.lts.users.Account.AccountType;
 
 /**
  *
@@ -41,7 +42,7 @@ public class AccountTests {
     
     @Test
     public void testHash() {
-        Account user = new Account("asiron", "this is password");
+        Account user = new Account(Account.AccountType.REGULARUSER, "asiron", "this is password");
         
         Boolean actual = user.checkPassword("this is password");
         Boolean expected = true;
@@ -49,11 +50,20 @@ public class AccountTests {
         Assert.assertEquals("Passwords match", expected, actual);        
      
         
-        user = new Account("asiron2", "this is password");
+        user = new Account(Account.AccountType.REGULARUSER, "asiron2", "this is password");
         
         actual = user.checkPassword("bullshit");
         expected = false;
         
-        Assert.assertEquals("Passwords don't match", expected, actual);   
+        Assert.assertEquals("Passwords don't match", expected, actual); 
+    
     }
+    
+    @Test
+    public void testAccountTypes() {
+        for (AccountType at : Account.AccountType.values()) {
+            System.out.println(at);
+        }
+    }
+        
 }

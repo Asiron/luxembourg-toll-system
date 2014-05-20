@@ -14,14 +14,16 @@ import uni.lu.lts.vehicle.special.SpecialVehicle;
  *
  * @author asiron
  */
-public class RegularUser extends Account implements VehicleOwner{
+public class RegularUser extends Account implements VehicleOwner {
 
     private Vehicle registeredVehicle;
-    
-    public RegularUser(String username, String password) {
-        super(username, password);
+
+    public RegularUser(AccountType type, String username, String password) {
+        super(type, username, password);
         permissions.add(Permission.READONLYSELF);
     }
+    
+    
     
     @Override
     public boolean registerVehicle(VehicleType type, String numberPlate, CountryCode country, float height) {

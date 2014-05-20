@@ -1,7 +1,7 @@
 package uni.lu.lts.vehicle;
 
-import uni.lu.lts.util.CountryCode;
 import uni.lu.lts.facility.TollFacility;
+import uni.lu.lts.util.CountryCode;
 
 public class Vehicle {
 

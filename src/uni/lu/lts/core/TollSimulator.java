@@ -1,8 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package uni.lu.lts.core;
+    
+import java.util.concurrent.locks.Lock;
+
 
 /**
  *
@@ -10,15 +9,19 @@ package uni.lu.lts.core;
  */
 public class TollSimulator extends Thread {
     
+    private Lock ltsLock;
     private LuxembourgTollSystem database;
     
-    public TollSimulator(LuxembourgTollSystem database) {
+    public TollSimulator(Lock ltsLock, LuxembourgTollSystem database) {
         this.database = database;
+        this.ltsLock = ltsLock;
     }
     
     @Override
     public void run() {
-        
+        while (true) {
+            
+        }
     }
     
 }
