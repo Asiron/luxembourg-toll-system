@@ -5,12 +5,19 @@
 package uni.lu.lts.facility;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import uni.lu.lts.core.TollSystemRecord;
+import java.util.Set;
+import uni.lu.lts.facility.record.SensorReadingError;
+import uni.lu.lts.facility.record.TollSystemRecord;
+import uni.lu.lts.facility.sensor.ErrorType;
+import uni.lu.lts.facility.sensor.Image;
 import uni.lu.lts.facility.sensor.Sensor;
-import uni.lu.lts.facility.sensor.SensorReadingError;
+import uni.lu.lts.util.ImmutablePair;
+import uni.lu.lts.vehicle.Vehicle;
+import uni.lu.lts.vehicle.VehicleType;
 
 /**
  *
@@ -27,9 +34,9 @@ public class TollFacility {
     public TollFacility(Section section, String facilityID) {
         this.section    = section;
         this.facilityID = facilityID;
-        this.sensors    = new HashMap<Integer, Sensor>();
-        this.records    = new ArrayList<TollSystemRecord>();
-        this.errorList  = new ArrayList<SensorReadingError>(); 
+        this.sensors    = new HashMap<>();
+        this.records    = new ArrayList<>();
+        this.errorList  = new ArrayList<>(); 
     }
 
     /**
@@ -120,6 +127,58 @@ public class TollFacility {
      */
     public void setSection(Section section) {
         this.section = section;
+    }
+ 
+    
+    /**
+     * Pulls buffer queues from all sensor belonging to this TollFacility
+     */
+    public void pullBuffersFromSensorQueues() {
+        for (Map.Entry<Integer, Sensor> entry : sensors.entrySet()) {
+            Integer sensorID = entry.getKey();
+            Sensor  sensor   = entry.getValue();
+            
+            while(sensor.isActive() && !sensor.isBufferEmpty()) {
+                ImmutablePair<Vehicle, Date> reading = sensor.getFirstFromBuffer();
+                
+                ErrorType error = checkSensorReading(sensor, reading);
+                
+                if (error == ErrorType.NOERROR) {
+
+                    Float price = section.getPrice(reading.getFirst().getVehicleType());  
+                    records.add( new TollSystemRecord(price, reading.getFirst(), sensorID, reading.getSecond(), new Image()));
+                } else {
+                    errorList.add ( new SensorReadingError(error, sensorID, new Date(), new Image()));
+                }
+            }
+        }
+    }
+    
+    private ErrorType checkSensorReading(Sensor sensor, ImmutablePair<Vehicle, Date> reading) {
+        
+        float maxVehicleHeight = sensor.getMaxVehicleHeight();
+        Set<VehicleType> allowedTypes = sensor.getAllowedTypes();
+      
+        ErrorType retValue = ErrorType.NOERROR;
+        
+        if (reading.getSecond().getTime() > new Date().getTime()) {
+            // reading from the future
+            retValue = ErrorType.RECORDINGFROMFUTURE;
+        } else if (allowedTypes.contains(reading.getFirst().getVehicleType()) == false) {
+            // unallowed vehicle type
+            retValue = ErrorType.UNALLOWEDVEHICLETYPE;
+        } else if (maxVehicleHeight < reading.getFirst().getHeight()) {
+            // vehicle's height surpassing limit
+            retValue = ErrorType.VEHHEIGHTSURPASSES;
+        } else if (reading.getFirst().getCountry() == null) {
+            // country unspecified
+            retValue = ErrorType.UNKNOWNCOUNTRY;
+        } else if (reading.getFirst().getNumberPlate() == null) {
+            // license plate unspecified
+            retValue = ErrorType.UNKNOWNPLATES;
+        }
+        
+        return retValue;
     }
 
 }

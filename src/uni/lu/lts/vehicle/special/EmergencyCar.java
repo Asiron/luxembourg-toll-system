@@ -4,7 +4,7 @@
  */
 package uni.lu.lts.vehicle.special;
 
-import uni.lu.lts.vehicle.CountryCode;
+import uni.lu.lts.util.CountryCode;
 import uni.lu.lts.vehicle.VehicleType;
 
 /**

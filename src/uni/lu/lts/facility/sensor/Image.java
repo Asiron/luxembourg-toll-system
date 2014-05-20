@@ -15,6 +15,13 @@ public class Image {
     public Image(byte[] data) {
         this.data = data;
     }    
+
+    /**
+     * Mock for taking images once a car is passing by toll facility
+     */
+    public Image() {
+        this.data = new byte[1];
+    }
     
     /**
      * Get the value of data

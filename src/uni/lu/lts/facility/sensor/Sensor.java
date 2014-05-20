@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
+import uni.lu.lts.facility.record.Record;
 import uni.lu.lts.util.ImmutablePair;
 import uni.lu.lts.vehicle.Vehicle;
 import uni.lu.lts.vehicle.VehicleType;
@@ -129,8 +130,20 @@ public class Sensor {
      */
     public void registerPassingByVehicle(Vehicle vehicle) {
         if (isActive()) {
-            ImmutablePair<Vehicle, Date> record = new ImmutablePair<>(vehicle, new Date());
+            ImmutablePair<Vehicle, Date> record = new ImmutablePair<Vehicle, Date>(vehicle, new Date());
             this.passedByVehicleBuffer.add(record);  
         }
+    }
+    
+    /**
+     * Checks if queue buffer is empty
+     * @return true if buffer is empty
+     */
+    public boolean isBufferEmpty() {
+        return passedByVehicleBuffer.isEmpty();
+    }
+    
+    public ImmutablePair<Vehicle, Date> getFirstFromBuffer() {
+        return passedByVehicleBuffer.poll();
     }
 }

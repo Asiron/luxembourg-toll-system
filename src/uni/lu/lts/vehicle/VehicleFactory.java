@@ -4,6 +4,7 @@
  */
 package uni.lu.lts.vehicle;
 
+import uni.lu.lts.util.CountryCode;
 import uni.lu.lts.vehicle.special.EmergencyCar;
 import uni.lu.lts.vehicle.special.FirefighterCar;
 import uni.lu.lts.vehicle.special.PoliceCar;

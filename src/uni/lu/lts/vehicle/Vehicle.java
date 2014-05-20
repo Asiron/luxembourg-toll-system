@@ -1,5 +1,6 @@
 package uni.lu.lts.vehicle;
 
+import uni.lu.lts.util.CountryCode;
 import uni.lu.lts.facility.TollFacility;
 
 public class Vehicle {
@@ -17,6 +18,40 @@ public class Vehicle {
             this.height = height;
     }
 
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public String getNumberPlate() {
+        return numberPlate;
+    }
+
+    public void setNumberPlate(String numberPlate) {
+        this.numberPlate = numberPlate;
+    }
+
+    public CountryCode getCountry() {
+        return country;
+    }
+
+    public void setCountry(CountryCode country) {
+        this.country = country;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    
+    
     public void setLatestPointPassed(TollFacility latestPointPassed) {
         this.latestPointPassed = latestPointPassed;
     }

@@ -1,5 +1,7 @@
 package uni.lu.lts.vehicle;
 
+import uni.lu.lts.util.CountryCode;
+
 /**
  *
  * @author asiron

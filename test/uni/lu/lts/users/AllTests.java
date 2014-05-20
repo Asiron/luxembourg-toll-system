@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
  * @author asiron
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({AccountTests.class})
+@Suite.SuiteClasses({AccountTests.class, LTSTests.class})
 public class AllTests {
 
     @BeforeClass

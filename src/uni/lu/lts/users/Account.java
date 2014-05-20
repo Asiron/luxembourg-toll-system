@@ -27,7 +27,7 @@ public class Account {
         
         this.passwordHash = HashUtil.computeHash(password) + HashUtil.convertBytesToString(salt);
         
-        this.permissions = new HashSet<Permission>();
+        this.permissions = new HashSet<>();
     }
 	
     public String getUsername() {

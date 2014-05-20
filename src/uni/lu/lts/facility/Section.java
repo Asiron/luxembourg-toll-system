@@ -4,29 +4,25 @@
  */
 package uni.lu.lts.facility;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import uni.lu.lts.vehicle.VehicleType;
 
 /**
  *
  * @author asiron
  */
 public class Section {
-    
-    private float carPrice;
-    private float motorbikePrice;
-    private float truckPrice;
-    private float busPrice;
+   
     private String name;
+    private Map<VehicleType, Float> prices;
     private Map<String, TollFacility> tollFacilities;
 
-    public Section(float carPrice, float motorbikePrice, float truckPrice, float busPrice, String name) {
-        this.carPrice       = carPrice;
-        this.motorbikePrice = motorbikePrice;
-        this.truckPrice     = truckPrice;
-        this.busPrice       = busPrice;
+    public Section(String name) {
         this.name           = name;
-        this.tollFacilities = new HashMap<String, TollFacility>();
+        this.prices         = new EnumMap<>(VehicleType.class);
+        this.tollFacilities = new HashMap<>();
     }
 
     /**
@@ -65,77 +61,23 @@ public class Section {
     public void setName(String name) {
         this.name = name;
     }
-
+    
     /**
-     * Get the value of busPrice
+     * Get the value of price for given vehicle type
      *
-     * @return the value of busPrice
+     * @param type value of price for given vehicle type
      */
-    public float getBusPrice() {
-        return busPrice;
+    public Float getPrice(VehicleType type) {
+        return prices.get(type);
     }
-
+    
     /**
-     * Set the value of busPrice
+     * Set the value of price for given vehicle type
      *
-     * @param busPrice new value of busPrice
+     * @param type change price for this type
+     * @param newPrice new value of section
      */
-    public void setBusPrice(float busPrice) {
-        this.busPrice = busPrice;
+    public void setPrice(VehicleType type, Float newPrice) {
+        prices.put(type, newPrice);
     }
-
-    /**
-     * Get the value of truckPrice
-     *
-     * @return the value of truckPrice
-     */
-    public float getTruckPrice() {
-        return truckPrice;
-    }
-
-    /**
-     * Set the value of truckPrice
-     *
-     * @param truckPrice new value of truckPrice
-     */
-    public void setTruckPrice(float truckPrice) {
-        this.truckPrice = truckPrice;
-    }
-
-    /**
-     * Get the value of motorbikePrice
-     *
-     * @return the value of motorbikePrice
-     */
-    public float getMotorbikePrice() {
-        return motorbikePrice;
-    }
-
-    /**
-     * Set the value of motorbikePrice
-     *
-     * @param motorbikePrice new value of motorbikePrice
-     */
-    public void setMotorbikePrice(float motorbikePrice) {
-        this.motorbikePrice = motorbikePrice;
-    }
-
-    /**
-     * Get the value of carPrice
-     *
-     * @return the value of carPrice
-     */
-    public float getCarPrice() {
-        return carPrice;
-    }
-
-    /**
-     * Set the value of carPrice
-     *
-     * @param carPrice new value of carPrice
-     */
-    public void setCarPrice(float carPrice) {
-        this.carPrice = carPrice;
-    }
-
 }

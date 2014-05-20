@@ -7,6 +7,8 @@ package uni.lu.lts.core;
 import java.util.HashMap;
 import java.util.Map;
 import uni.lu.lts.facility.Section;
+import uni.lu.lts.users.Account;
+import uni.lu.lts.users.Root;
 
 /**
  *
@@ -14,13 +16,15 @@ import uni.lu.lts.facility.Section;
  */
 public class LuxembourgTollSystem {
 
-    private Map<String, Section> sections = null;
-
-    public LuxembourgTollSystem() {
-        this.sections = new HashMap<String, Section>();
-    }
-
+    private Map<String, Section> sections;
+    private Map<String, Account> accounts ;
     
+    
+    public LuxembourgTollSystem() {
+        this.sections = new HashMap<>();
+        this.accounts = new HashMap<>();
+        this.accounts.put("root", new Root());
+    }
     
     /**
      * Get the value of sections
@@ -38,5 +42,13 @@ public class LuxembourgTollSystem {
      */
     public void setSections(Map<String, Section> sections) {
         this.sections = sections;
+    }
+    
+    public boolean login(String login, String password) {
+        Account account = accounts.get(login);
+        if (account != null) {
+            return account.checkPassword(password);
+        }
+        return false;
     }
 }

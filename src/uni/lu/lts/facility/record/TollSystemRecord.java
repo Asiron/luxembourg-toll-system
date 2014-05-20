@@ -2,23 +2,23 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uni.lu.lts.core;
+package uni.lu.lts.facility.record;
 
 import java.util.Date;
+import uni.lu.lts.facility.sensor.Image;
 import uni.lu.lts.vehicle.Vehicle;
 
 /**
  *
  * @author asiron
  */
-public class TollSystemRecord {
+public class TollSystemRecord extends Record {
     
-    private final Date timestamp;
     private final float calculatedPrice;
     private final Vehicle vehicleRef;
 
-    public TollSystemRecord(Date timestamp, float calculatedPrice, Vehicle vehicleRef) {
-        this.timestamp = timestamp;
+    public TollSystemRecord(float calculatedPrice, Vehicle vehicleRef, Integer sensorID, Date timestamp, Image image) {
+        super(sensorID, timestamp, image);
         this.calculatedPrice = calculatedPrice;
         this.vehicleRef = vehicleRef;
     }
@@ -40,14 +40,4 @@ public class TollSystemRecord {
     public float getCalculatedPrice() {
         return calculatedPrice;
     }
-
-    /**
-     * Get the value of timestamp
-     *
-     * @return the value of timestamp
-     */
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
 }
