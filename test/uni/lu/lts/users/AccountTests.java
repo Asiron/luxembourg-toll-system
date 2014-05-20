@@ -42,7 +42,7 @@ public class AccountTests {
     
     @Test
     public void testHash() {
-        Account user = new Account(Account.AccountType.REGULARUSER, "asiron", "this is password");
+        Account user = new Account(Account.AccountType.REGULAR, "asiron", "this is password");
         
         Boolean actual = user.checkPassword("this is password");
         Boolean expected = true;
@@ -50,7 +50,7 @@ public class AccountTests {
         Assert.assertEquals("Passwords match", expected, actual);        
      
         
-        user = new Account(Account.AccountType.REGULARUSER, "asiron2", "this is password");
+        user = new Account(Account.AccountType.REGULAR, "asiron2", "this is password");
         
         actual = user.checkPassword("bullshit");
         expected = false;

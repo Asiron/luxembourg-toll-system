@@ -158,6 +158,12 @@ public class LuxembourgTollSystem {
         
     private void selectCommand(String[] tokens) {
         
+        
+        if (loggedIn != null &&
+            loggedIn.checkPermission(Permission.READONLYSELF))
+        {
+            
+        }
     }
         
     private void modifyCommand(String[] tokens) {
