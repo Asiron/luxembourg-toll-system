@@ -3,11 +3,17 @@ package uni.lu.lts.core;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.locks.Lock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import uni.lu.lts.facility.Section;
 import uni.lu.lts.facility.TollFacility;
 import uni.lu.lts.facility.sensor.Sensor;
+import uni.lu.lts.util.CountryCode;
 import uni.lu.lts.util.RandomString;
+import uni.lu.lts.vehicle.Vehicle;
+import uni.lu.lts.vehicle.VehicleFactory;
 import uni.lu.lts.vehicle.VehicleType;
 
 
@@ -20,17 +26,42 @@ public class TollSimulator extends Thread {
     private Lock ltsLock;
     private LuxembourgTollSystem database;
     
+    private Vector<Sensor> allSensors;
+    private Vector<Vehicle> simulationVehicles;
+    
     public TollSimulator(Lock ltsLock, LuxembourgTollSystem database) {
         this.database = database;
         this.ltsLock = ltsLock;
+        this.allSensors = new Vector<>();
+        this.simulationVehicles = new Vector<>();
+        this.simulationVehicles.add(createRandomVehicle());
     }
     
     @Override
     public void run() {
         generateMap();
-        int a = 1;
-        while (true) {
+        while (!interrupted()) {
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException ex) {
+                System.out.println("Interrupt exception during running TollSimulator");
+            }
             
+            if (new Random().nextFloat() < 0.3) {
+                ltsLock.lock();
+                Vehicle randomVehicle = getRandomVehicle();
+                Sensor  randomSensor  = getRandomSensor();
+                randomSensor.registerPassingByVehicle(randomVehicle);
+                ltsLock.unlock();
+                System.out.println("Toll: " +randomVehicle);
+            }
+            if (new Random().nextFloat() < 0.3) {
+                ltsLock.lock();
+                Vehicle newVehicle = createRandomVehicle();
+                simulationVehicles.add(newVehicle);
+                ltsLock.unlock();
+                System.out.println("Created: " + newVehicle);
+            }
         }
     }
     
@@ -55,11 +86,45 @@ public class TollSimulator extends Thread {
                     }
                     Sensor sensor = new Sensor(k, maxVehicleHeight, true, allowedTypes);
                     facility.getSensors().put(k, sensor);
+                    allSensors.add(sensor);
                 }
             }
         }  
         ltsLock.unlock();
     }
     
+    private Vehicle createRandomVehicle() {
+        
+        Random r = new Random();
+
+        Float vehicleHeight = new Float(1 + r.nextFloat() * 2.5);
+        
+        CountryCode country;
+        String numberPlates;
+        VehicleType vehicleType;
+        
+        if (r.nextFloat() < 0.1) {
+            country = null;
+        } else {
+            country = CountryCode.randomCountry();
+        }
+        
+        if (r.nextFloat() < 0.1) {
+            numberPlates = null;
+        } else {
+            numberPlates = RandomString.generateAlphaNumbericString(6);
+        }
+       
+        vehicleType = VehicleType.randomVehicleType();
+        
+        return VehicleFactory.createVehicle(vehicleType, numberPlates, country, vehicleHeight);
+        
+    }    
+    private Vehicle getRandomVehicle() {
+        return simulationVehicles.get(new Random().nextInt(simulationVehicles.size()));
+    }
     
+    private Sensor getRandomSensor() {
+        return allSensors.get(new Random().nextInt(allSensors.size()));
+    }
 }

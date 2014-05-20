@@ -129,7 +129,6 @@ public class TollFacility {
         this.section = section;
     }
  
-    
     /**
      * Pulls buffer queues from all sensor belonging to this TollFacility
      */
@@ -140,11 +139,11 @@ public class TollFacility {
             
             while(sensor.isActive() && !sensor.isBufferEmpty()) {
                 ImmutablePair<Vehicle, Date> reading = sensor.getFirstFromBuffer();
-                
                 ErrorType error = checkSensorReading(sensor, reading);
                 
                 if (error == ErrorType.NOERROR) {
-
+                    
+                    reading.getFirst().setLatestPointPassed(this);
                     Float price = section.getPrice(reading.getFirst().getVehicleType());  
                     records.add( new TollSystemRecord(price, reading.getFirst(), sensorID, reading.getSecond(), new Image()));
                 } else {

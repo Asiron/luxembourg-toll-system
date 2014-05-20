@@ -16,8 +16,17 @@ import uni.lu.lts.vehicle.special.PoliceCar;
 public class VehicleFactory {
     
     public static Vehicle createVehicle(VehicleType type, String numberPlate, CountryCode country, float height) {
+        
+        if (type == null) {
+            System.out.println("VehicleFactory class received unknown enum value of VehicleType");       
+            return null;
+        }
+        
         Vehicle returnVal = null;
         switch (type) {
+            case CAR:
+                returnVal = new Car(type, numberPlate, country, height);
+                break;
             case MOTORBIKE:
                 returnVal = new Motorbike(type, numberPlate, country, height);
                 break;

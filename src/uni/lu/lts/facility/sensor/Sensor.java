@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
-import uni.lu.lts.facility.record.Record;
 import uni.lu.lts.util.ImmutablePair;
 import uni.lu.lts.vehicle.Vehicle;
 import uni.lu.lts.vehicle.VehicleType;
@@ -131,7 +130,7 @@ public class Sensor {
     public void registerPassingByVehicle(Vehicle vehicle) {
         if (isActive()) {
             ImmutablePair<Vehicle, Date> record = new ImmutablePair<Vehicle, Date>(vehicle, new Date());
-            this.passedByVehicleBuffer.add(record);  
+            this.passedByVehicleBuffer.add(record);
         }
     }
     

@@ -5,14 +5,17 @@
 package uni.lu.lts.core;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import uni.lu.lts.facility.Section;
 import uni.lu.lts.users.Account;
 import uni.lu.lts.users.Account.AccountType;
 import uni.lu.lts.users.AccountFactory;
 import uni.lu.lts.users.Permission;
+import uni.lu.lts.vehicle.Vehicle;
 
 /**
  *
@@ -22,18 +25,18 @@ public class LuxembourgTollSystem {
 
     private Lock ltsLock;
     private Map<String, Section> sections;
-    private Map<String, Account> accounts ;
-    
+    private Map<String, Account> accounts;
+    private Set<Vehicle> recordedVehicles;
     private Account loggedIn = null;
-    
     
     public LuxembourgTollSystem(Lock ltsLock) {
         this.ltsLock = ltsLock;
         this.sections = new HashMap<>();
         this.accounts = new HashMap<>();
+        this.recordedVehicles = new HashSet<>();
         this.accounts.put("root", AccountFactory.createAccount(Account.AccountType.ROOT, "root", "root"));
     }
-    
+
     /**
      * Get the value of sections
      *

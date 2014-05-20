@@ -4,6 +4,12 @@
  */
 package uni.lu.lts.util;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import uni.lu.lts.vehicle.VehicleType;
+
 /**Country codes for vehicles in Europe
  *
  * @author asiron
@@ -64,6 +70,10 @@ public enum CountryCode {
 
     private final String fullname;
 
+    private static final List<CountryCode> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+    private static final int SIZE = VALUES.size();
+    private static final Random RANDOM = new Random();
+    
     private CountryCode(String fullname) {
         this.fullname = fullname;
     }
@@ -71,6 +81,14 @@ public enum CountryCode {
     @Override
     public String toString() {
         return fullname;
+    }
+    
+    public static int getSize() {
+        return SIZE;
+    }
+    
+    public static CountryCode randomCountry()  {
+        return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
 }

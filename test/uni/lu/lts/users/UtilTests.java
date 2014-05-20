@@ -4,24 +4,21 @@
  */
 package uni.lu.lts.users;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import uni.lu.lts.core.LuxembourgTollSystem;
+import uni.lu.lts.util.CountryCode;
 
 /**
  *
  * @author asiron
  */
-public class LTSTests {
+public class UtilTests {
     
-    public LTSTests() {
+    public UtilTests() {
     }
     
     @BeforeClass
@@ -43,18 +40,13 @@ public class LTSTests {
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
-    public void testLogin() {
+    public void testCountryCode() {
+        for (CountryCode cc : CountryCode.values()) {
+            System.out.print(cc + " ");
+        }
         
-        Lock ltsLock = new ReentrantLock(true);
-        LuxembourgTollSystem lts = new LuxembourgTollSystem(ltsLock);
-        
-        Account actual   = lts.login("root", "root");
-                
-        Assert.assertTrue(actual instanceof Root);
-        
-        actual   = lts.login("root", "lol");
-        
-        Assert.assertTrue(!(actual instanceof Root));
-        
+        for (int i = 0; i < 10; i++) {
+            System.out.print(CountryCode.randomCountry() + " ");
+        }
     }
 }
