@@ -99,43 +99,82 @@ public class LuxembourgTollSystem {
             line = scanner.nextLine();
             String[] tokens = line.trim().split("\\s+");
             
-            if (tokens[0].equals("login") && loggedIn == null) {
-                loggedIn = login(tokens[1], tokens[2]);
-                continue;
-            } else if (tokens[0].equals("login") && loggedIn != null) {
-                System.out.println("You are already logged in!");
-                continue;
-            }
-            
-            if (tokens[0].equals("logout") && loggedIn != null) {
-                logout();
-                continue;
-            } else if (tokens[0].equals("logout") && loggedIn == null) {
-                System.out.println("You are not logged in!");
-                continue;
-            }
-            
-            if (tokens[0].equals("create") && loggedIn != null &&
-                loggedIn.checkPermission(Permission.MODIFYACCOUNTS))
-            {
-                String accountType = tokens[1];
-                String login       = tokens[2];
-                String password    = tokens[3];
-                
-                createAccount(accountType, login, password);
-                continue;
-            } else if ((tokens[0].equals("create") && loggedIn == null) ||
-                       (tokens[0].equals("create") && !loggedIn.checkPermission(Permission.MODIFYACCOUNTS)))
-            {
-                System.out.println("Cannot create accounts without permissions");
-                continue;
+            switch (tokens[0].toLowerCase()) {
+                case "login":
+                    loginCommand(tokens);
+                    break;
+                case "logout":
+                    logoutCommand(tokens);
+                    break;
+                case "create":
+                    createCommand(tokens);
+                    break;
+                case "select":
+                    selectCommand(tokens);
+                    break;
+                case "modify":
+                    modifyCommand(tokens);
+                    break;
+                case "help":
+                    helpCommand();
+                    break;
+                default:
+                    unrecognizedCommand();
+                    break;             
             }
         }
     }
     
-    private void printTokens(String[] tokens) {
-        for (String string : tokens) {
-            System.out.print("<" + string + ">");
+    private void loginCommand(String[] tokens) {
+        if (loggedIn == null) {
+            loggedIn = login(tokens[1], tokens[2]);
+        } else if (loggedIn != null) {
+            System.out.println("You are already logged in!");
         }
+    }
+    
+    private void logoutCommand(String[] tokens) {
+        if (loggedIn != null) {
+            logout();
+        } else if (loggedIn == null) {
+            System.out.println("You are not logged in!");
+        }
+    }
+    
+    private void createCommand(String[] tokens) {
+        if (loggedIn != null &&
+            loggedIn.checkPermission(Permission.MODIFYACCOUNTS))
+        {
+            String accountType = tokens[1];
+            String login       = tokens[2];
+            String password    = tokens[3];
+
+            createAccount(accountType, login, password);
+        } else if (loggedIn == null || !loggedIn.checkPermission(Permission.MODIFYACCOUNTS))
+        {
+            System.out.println("Cannot create accounts without permissions");
+        }
+    }
+        
+    private void selectCommand(String[] tokens) {
+        
+    }
+        
+    private void modifyCommand(String[] tokens) {
+        
+    }  
+
+    private void helpCommand() {
+        System.out.printf("Usage:\n"
+                        + "login <username> <password> \t\t: to log into system\n"
+                        + "logout                      \t\t: to log out from system\n"
+                        + "create <type> <username> <password> \t: to create new account\n"
+                        + "select help                         \t: to display help about select from DB\n"
+                        + "modify help                         \t: to display help about modifying DB\n"
+                        + "help                                \t: to display this help\n");
+    }
+
+    private void unrecognizedCommand() {
+        System.out.println("Unrecognized command, try \"help\" to display information");
     }
 }
