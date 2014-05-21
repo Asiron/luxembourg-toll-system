@@ -90,4 +90,26 @@ public class Section implements Comparable<Section> {
     public int compareTo(Section o) {
         return name.compareTo(o.getName());
     }
+
+    public boolean checkConditions(String[] conditions) {
+        for (String condition : conditions) {
+            String[] operands = condition.split("=");
+            String leftOperand  = operands[0].toLowerCase();
+            String rightOperand = operands[1];
+            
+            switch (leftOperand) {
+                case "name":
+                    if (!name.equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "price":
+                    if (!prices.containsKey(VehicleType.valueOf(rightOperand))) {
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
 }

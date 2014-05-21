@@ -4,6 +4,7 @@
  */
 package uni.lu.lts.vehicle;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -118,6 +119,10 @@ public class VehicleFactory {
     
     public static Vehicle getVehicleByNumberPlate(String numberPlate) {
         return createdVehicles.get(numberPlate);
+    }
+    
+    public static Collection<Vehicle> getAllVehicles() {
+        return createdVehicles.values();
     }
     
     private static boolean isUniqueNumberPlate(String numberPlate) {

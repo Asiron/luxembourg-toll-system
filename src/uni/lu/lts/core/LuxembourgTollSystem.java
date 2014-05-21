@@ -5,8 +5,12 @@
 package uni.lu.lts.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -14,13 +18,18 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import uni.lu.lts.facility.Section;
 import uni.lu.lts.facility.TollFacility;
+import uni.lu.lts.facility.record.Record;
+import uni.lu.lts.facility.record.SensorReadingError;
 import uni.lu.lts.facility.record.TollSystemRecord;
+import uni.lu.lts.facility.sensor.Sensor;
 import uni.lu.lts.users.Account;
 import uni.lu.lts.users.Account.AccountType;
 import uni.lu.lts.users.AccountFactory;
 import uni.lu.lts.users.Permission;
 import uni.lu.lts.users.VehicleOwner;
+import uni.lu.lts.util.CollectionsUtil;
 import uni.lu.lts.vehicle.Vehicle;
+import uni.lu.lts.vehicle.VehicleFactory;
 
 /**
  *
@@ -101,24 +110,131 @@ public class LuxembourgTollSystem {
         System.out.println("Successfully created account");
     }
     
-    public List<TollSystemRecord> fetchAllDataForVehicle(String numberPlate) {
-        List<TollSystemRecord> data = new ArrayList<>();
+    public List<Record> fetchRecordDataForVehicle(String selector, String dataType, String[] conditions) {
+        List<Record> data = new ArrayList<>();
         ltsLock.lock();
             for (Map.Entry<String, Section> entrySection : sections.entrySet()) {
                 Section currentSection = entrySection.getValue();
                 for (Map.Entry<String, TollFacility> entryTF: currentSection.getTollFacilities().entrySet()) {
                     TollFacility currentTF = entryTF.getValue();
-                    currentTF.pullBuffersFromSensorQueues();
-                    List<TollSystemRecord> pulledRecords = currentTF.getRecords().get(numberPlate);
+                    
+                    List<Record> pulledRecords = null;
+                    
+                    switch (dataType) {
+                        case "tolls":
+                            currentTF.pullBuffersFromSensorQueues();
+                            if (selector.equals("all")) {
+                                pulledRecords = new ArrayList<Record>(currentTF.getAllRecords());
+                            } else {
+                                pulledRecords = new ArrayList<Record>(currentTF.getRecords().get(selector));
+                            }
+                            break;
+                        case "errors":
+                            pulledRecords = new ArrayList<Record>(currentTF.getErrorList());
+                            break;
+                    }
+                    
                     if (pulledRecords != null) { 
+                        Iterator<Record> iter = pulledRecords.iterator();
+                        while(iter.hasNext()) {
+                            Record tsr = iter.next();
+                            if (tsr.checkConditions(conditions) == false) {
+                                iter.remove();
+                            }
+                        }
                         data.addAll(pulledRecords); 
                     }
                 }
             }
         ltsLock.unlock();
+        
         return data;
     }
-     
+        
+    public List<Vehicle> fetchVehicleData(String[] conditions) {
+        List<Vehicle> data = (List<Vehicle>) VehicleFactory.getAllVehicles();
+        
+        Iterator<Vehicle> iter = data.iterator();
+        while(iter.hasNext()) {
+            Vehicle vehicule = iter.next();
+            if (vehicule.checkConditions(conditions) == false) {
+                iter.remove();
+            }
+        }
+        
+        return data;
+        
+    }
+ 
+    public List<Section> fetchSectionData(String[] conditions) {
+        ltsLock.lock();
+            List<Section> data = (List<Section>) sections.values();
+        ltsLock.unlock();
+        
+        Iterator<Section> iter = data.iterator();
+        while(iter.hasNext()) {
+            Section section = iter.next();
+            if (section.checkConditions(conditions) == false) {
+                iter.remove();
+            }
+        }
+        
+        return data;
+        
+    }  
+    
+    public List<TollFacility> fetchTollFacilityData(String[] conditions) {
+        ltsLock.lock();
+            List<TollFacility> data =  new ArrayList<>();
+            for (Map.Entry<String, Section> entrySection : sections.entrySet()) {
+                Section section = entrySection.getValue(); 
+                
+                for (Map.Entry<String, TollFacility> entryTF : section.getTollFacilities().entrySet()) {
+                    String tollFacilityID = entryTF.getKey();
+                    TollFacility tf = entryTF.getValue();
+                    
+                    if(tf.checkConditions(conditions) == true) {
+                        data.add(tf);
+                    }
+                }
+            }
+        ltsLock.unlock();
+        
+        return  data;
+        
+    }   
+    
+        
+    public List<?> fetchData(String selector, String dataType, String sortBy, String[] conditions) {
+        
+        List<?> results = null;
+        
+        if (selector.equals("my")) {
+            String myNumberPlate = ((VehicleOwner)loggedIn).getVehicle().getNumberPlate();
+            results = fetchRecordDataForVehicle(myNumberPlate, dataType, conditions);
+        } else if (selector.equals("all")) {
+            switch (dataType) {
+                case "errors": case "tolls":
+                    results = fetchRecordDataForVehicle(selector, dataType, conditions);
+                    break;
+                case "vehicles":
+                    results = fetchVehicleData(conditions);
+                    break;
+                case "sections":
+                    results = fetchSectionData(conditions);
+                    break;
+                case "tfs":
+                    results = fetchTollFacilityData(conditions);
+                    break;
+            }
+        } else if (selector.length() > 0) {
+            results = fetchRecordDataForVehicle(selector, dataType, conditions);
+        } 
+        
+        return  CollectionsUtil.sortBy(results, sortBy);
+        
+    }
+    
     public void start() {
         Scanner scanner = new Scanner(System.in);
         String line;
@@ -228,29 +344,36 @@ public class LuxembourgTollSystem {
             System.out.println("You don't have permission or you are not logged in");
         }
     }
+    
     private void selectCommand(String[] tokens) {
         
+            String selector  = tokens[1];
+            String object    = tokens[2];
+            String wantsSort = tokens[3];
+            String sortBy    = tokens[4];     
+            String wantsCond = tokens[5];
+            
+            String[] conditions = Arrays.copyOfRange(tokens, 6, tokens.length);
+            
         if (loggedIn != null &&
             loggedIn.checkPermission(Permission.READONLYSELF))
         {
-            String selector = tokens[1];
-            if (selector.equals("me")) {
-                VehicleOwner vehicleOwner = (VehicleOwner) loggedIn;
-                if (vehicleOwner.getVehicle() == null) {
-                    System.out.println("You have to register your vehicle!");
-                    return;
-                }
-                List<TollSystemRecord> records = fetchAllDataForVehicle(vehicleOwner.getVehicle().getNumberPlate());
-                for (TollSystemRecord record : records) {
-                    System.out.println(record);
-                }
+            switch (selector) {
+                case "my":     
+                    printResults(fetchData(selector, object, sortBy, conditions));
+                    break;
+                case "all":
+                    System.out.println("You can't select \"all\" as regular user");
+                    break;
+                default:
+                    System.out.println("only \"my\" or \"all\" are allowed for specifing quantity of selected objects");
+                    break;
             }
             
         } else if (loggedIn != null &&
                    loggedIn.checkPermission(Permission.READALL))
         {
-            String selector = tokens[1];
-            
+            printResults(fetchData(selector, object, sortBy, conditions));          
         } else {
             System.out.println("You don't have permission or you are not logged in");
         }
@@ -275,5 +398,11 @@ public class LuxembourgTollSystem {
         System.out.println("Unrecognized command, try \"help\" to display information");
     }
 
-
+    private void printResults(List<?> results) {
+        int i = 1;
+        for (Object object : results) {
+            System.out.println(i + " " +object);
+            i++;
+        }
+    }
 }

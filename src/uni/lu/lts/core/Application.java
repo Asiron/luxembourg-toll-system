@@ -20,7 +20,7 @@ public class Application {
         Lock ltsLock = new ReentrantLock(true);
 
         LuxembourgTollSystem lts = new LuxembourgTollSystem(ltsLock);
-        TollSimulator ts = new TollSimulator(ltsLock, lts, false);
+        TollSimulator ts = new TollSimulator(ltsLock, lts, true);
         ts.start();
         lts.start();
     }

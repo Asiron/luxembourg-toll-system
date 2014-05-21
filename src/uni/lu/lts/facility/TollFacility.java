@@ -198,4 +198,40 @@ public class TollFacility implements Comparable<TollFacility> {
     public int compareTo(TollFacility o) {
         return facilityID.compareTo(o.getFacilityID());
     }
+    
+        public boolean checkConditions(String[] conditions) {
+        for (String condition : conditions) {
+            String[] operands = condition.split("=");
+            String leftOperand  = operands[0].toLowerCase();
+            String rightOperand = operands[1];
+            
+            switch (leftOperand) {
+                case "name":
+                    if (!facilityID.equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "sensorNumber":
+                    if (sensors.size() != Integer.parseInt(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "section":
+                    if (!section.getName().equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
+        
+    public List<TollSystemRecord> getAllRecords() {
+        List<TollSystemRecord> data = new ArrayList<>();
+        for (Map.Entry<String, List<TollSystemRecord>> entry : records.entrySet()) {
+            data.addAll(entry.getValue());
+            
+        }
+        return data;
+    }
 }

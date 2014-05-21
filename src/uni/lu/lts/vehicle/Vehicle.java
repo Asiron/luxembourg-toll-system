@@ -1,6 +1,7 @@
 package uni.lu.lts.vehicle;
 
 import java.util.Comparator;
+import java.util.Date;
 import uni.lu.lts.facility.TollFacility;
 import uni.lu.lts.util.CountryCode;
 
@@ -77,7 +78,43 @@ public class Vehicle implements Comparable<Vehicle> {
     public int compareTo(Vehicle o) {
         return Comparators.NUMBERPLATE.compare(this, o);
     }
+         
+    public boolean checkConditions(String[] conditions) {
+        for (String condition : conditions) {
+            String[] operands = condition.split("=");
+            String leftOperand  = operands[0].toLowerCase();
+            String rightOperand = operands[1];
             
+            switch (leftOperand) {
+                case "type":
+                    if (!vehicleType.toString().equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "plate":
+                    if (!numberPlate.equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "country":
+                    if (!country.toString().equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "height":
+                    if( Math.abs(height - Float.parseFloat(rightOperand)) > 0.001 ) {
+                        return false;
+                    }
+                    break;
+                case "latest":
+                    if( !latestPointPassed.getFacilityID().equals(rightOperand) ) {
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }    
     public static class Comparators {
 
         public static Comparator<Vehicle> NUMBERPLATE = new Comparator<Vehicle>() {
@@ -107,7 +144,7 @@ public class Vehicle implements Comparable<Vehicle> {
             
         };
         
-        public static Comparator<Vehicle> CONTRY = new Comparator<Vehicle>() {
+        public static Comparator<Vehicle> COUNTRY = new Comparator<Vehicle>() {
             
             @Override
             public int compare(Vehicle o1, Vehicle o2) {

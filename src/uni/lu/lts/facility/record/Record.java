@@ -6,6 +6,7 @@ package uni.lu.lts.facility.record;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.logging.SimpleFormatter;
 import uni.lu.lts.facility.Section;
 import uni.lu.lts.facility.TollFacility;
 import uni.lu.lts.facility.sensor.Image;
@@ -48,12 +49,16 @@ public class Record implements Comparable<Record> {
     public String getTollFacilityName() {
         return zone.getSecond().getFacilityID();
     }
-    
+   
     @Override
     public int compareTo(Record o) {
         return Record.RecordComparators.DATE.compare(this, o);
     }
-            
+       
+    public boolean checkConditions(String[] conditions) {
+        return false;
+    }
+    
     public static class RecordComparators {
 
         public static Comparator<Record> DATE = new Comparator<Record>() {

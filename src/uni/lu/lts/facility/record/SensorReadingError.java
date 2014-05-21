@@ -32,6 +32,40 @@ public class SensorReadingError extends Record {
         return errorType;
     }
 
+    public boolean checkConditions(String[] conditions) {
+        for (String condition : conditions) {
+            String[] operands = condition.split("=");
+            String leftOperand  = operands[0].toLowerCase();
+            String rightOperand = operands[1];
+            
+            switch (leftOperand) {
+                case "section":
+                    if (!zone.getFirst().getName().equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "facility":
+                    if (!zone.getSecond().getFacilityID().equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "date":
+                    Date conditionDate = new Date();
+                    if (timestamp.compareTo(conditionDate) != 0) {
+                        return false;
+                    }
+                    break;
+                case "error":
+                    if(!errorType.toString().equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
+    
+    
     public static class SREComparators {
 
         public static Comparator<SensorReadingError> ERRORTYPE = new Comparator<SensorReadingError>() {

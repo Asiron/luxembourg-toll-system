@@ -45,6 +45,40 @@ public class TollSystemRecord extends Record {
     }
     
     @Override
+    public boolean checkConditions(String[] conditions) {
+        for (String condition : conditions) {
+            String[] operands = condition.split("=");
+            String leftOperand  = operands[0].toLowerCase();
+            String rightOperand = operands[1];
+            
+            switch (leftOperand) {
+                case "section":
+                    if (!zone.getFirst().getName().equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "facility":
+                    if (!zone.getSecond().getFacilityID().equals(rightOperand)) {
+                        return false;
+                    }
+                    break;
+                case "date":
+                    Date conditionDate = new Date();
+                    if (timestamp.compareTo(conditionDate) != 0) {
+                        return false;
+                    }
+                    break;
+                case "price":
+                    if( Math.abs(calculatedPrice - Float.parseFloat(rightOperand)) > 0.001 ) {
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
+    
+    @Override
     public String toString() {
         return "(" + timestamp + ", " + calculatedPrice + ", " 
                 + vehicleRef + " , " + zone.getFirst() + ", " + zone.getSecond() + " )"; 
@@ -60,7 +94,6 @@ public class TollSystemRecord extends Record {
             }
            
         };
-     
         
         public static Comparator<TollSystemRecord> VEHICLENUMBER = new Comparator<TollSystemRecord>() {
           
