@@ -28,15 +28,15 @@ public class TollFacility {
     private Section section;
     private String facilityID;
     private Map<Integer, Sensor> sensors;
-    private List<TollSystemRecord> records;
     private List<SensorReadingError> errorList;
+    private Map<String, List<TollSystemRecord>> records;
 
     public TollFacility(Section section, String facilityID) {
         this.section    = section;
         this.facilityID = facilityID;
         this.sensors    = new HashMap<>();
-        this.records    = new ArrayList<>();
         this.errorList  = new ArrayList<>(); 
+        this.records    = new HashMap<>();
     }
 
     /**
@@ -62,7 +62,7 @@ public class TollFacility {
      *
      * @return the value of records
      */
-    public List<TollSystemRecord> getRecords() {
+    public Map<String, List<TollSystemRecord>> getRecords() {
         return records;
     }
 
@@ -71,7 +71,7 @@ public class TollFacility {
      *
      * @param records new value of records
      */
-    public void setRecords(List<TollSystemRecord> records) {
+    public void setRecords(Map<String, List<TollSystemRecord>>  records) {
         this.records = records;
     }
 
@@ -145,9 +145,18 @@ public class TollFacility {
                     
                     reading.getFirst().setLatestPointPassed(this);
                     Float price = section.getPrice(reading.getFirst().getVehicleType());  
-                    records.add( new TollSystemRecord(price, reading.getFirst(), sensorID, reading.getSecond(), new Image()));
+                    String numberPlate = reading.getFirst().getNumberPlate();
+                    
+                    TollSystemRecord newRecord = new TollSystemRecord(price, reading.getFirst()
+                            , section, this, sensorID, new Date(), null);
+                    
+                    if (!records.containsKey(numberPlate)) {
+                        records.put(numberPlate, new ArrayList<TollSystemRecord>());
+                    }  
+                    records.get(numberPlate).add(newRecord);
+                    
                 } else {
-                    errorList.add ( new SensorReadingError(error, sensorID, new Date(), new Image()));
+                    errorList.add( new SensorReadingError(error, section, this, sensorID, new Date(), null));
                 }
             }
         }

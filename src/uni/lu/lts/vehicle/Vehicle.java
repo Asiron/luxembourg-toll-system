@@ -50,8 +50,6 @@ public class Vehicle {
         this.height = height;
     }
 
-    
-    
     public void setLatestPointPassed(TollFacility latestPointPassed) {
         this.latestPointPassed = latestPointPassed;
     }
@@ -62,6 +60,12 @@ public class Vehicle {
     
     @Override
     public String toString() {
-        return "(" + vehicleType.toString() + ", " + numberPlate + ", " + country + ", " + height + ")";
+        String countryCode;
+        if (country == null) {
+            countryCode = "Unknown";
+        } else {
+            countryCode = country.name();
+        }
+        return "(" + vehicleType + ", " + numberPlate + ", " + country + "(" + countryCode + "), " + height + ")";
     }
 }

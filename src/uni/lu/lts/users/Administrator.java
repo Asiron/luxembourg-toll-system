@@ -14,6 +14,5 @@ public class Administrator extends Account{
         super(type, username, password);
         permissions.add(Permission.MODIFYACCOUNTS);
         permissions.add(Permission.READALL);
-    }
-    
+    }    
 }

@@ -4,7 +4,10 @@
  */
 package uni.lu.lts.facility.record;
 
+import com.sun.org.glassfish.external.statistics.TimeStatistic;
 import java.util.Date;
+import uni.lu.lts.facility.Section;
+import uni.lu.lts.facility.TollFacility;
 import uni.lu.lts.facility.sensor.Image;
 import uni.lu.lts.vehicle.Vehicle;
 
@@ -17,8 +20,8 @@ public class TollSystemRecord extends Record {
     private final float calculatedPrice;
     private final Vehicle vehicleRef;
 
-    public TollSystemRecord(float calculatedPrice, Vehicle vehicleRef, Integer sensorID, Date timestamp, Image image) {
-        super(sensorID, timestamp, image);
+    public TollSystemRecord(float calculatedPrice, Vehicle vehicleRef, Section section, TollFacility facility, Integer sensorID, Date timestamp, Image image) {
+        super(section, facility, sensorID, timestamp, image);
         this.calculatedPrice = calculatedPrice;
         this.vehicleRef = vehicleRef;
     }
@@ -40,4 +43,10 @@ public class TollSystemRecord extends Record {
     public float getCalculatedPrice() {
         return calculatedPrice;
     }
-}
+    
+    @Override
+    public String toString() {
+        return "(" + timestamp + ", " + calculatedPrice + ", " 
+                + vehicleRef + ", " + zone.getFirst() + ", " + zone.getSecond(); 
+    }
+ }

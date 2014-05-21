@@ -11,7 +11,8 @@ package uni.lu.lts.users;
 public enum Permission {
     READALL ("User can read all from the toll databse"),
     READONLYSELF ("User can only read tolls from his own car"),
-    MODIFYACCOUNTS ("User can modify accounts");
+    MODIFYACCOUNTS ("User can modify accounts"),
+    REGISTERVEHICLE ("User can register a car");
     
     private final String fullname;
 

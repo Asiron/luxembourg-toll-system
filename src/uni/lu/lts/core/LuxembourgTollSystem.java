@@ -6,15 +6,18 @@ package uni.lu.lts.core;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import uni.lu.lts.facility.Section;
+import uni.lu.lts.facility.record.TollSystemRecord;
 import uni.lu.lts.users.Account;
 import uni.lu.lts.users.Account.AccountType;
 import uni.lu.lts.users.AccountFactory;
 import uni.lu.lts.users.Permission;
+import uni.lu.lts.users.VehicleOwner;
 import uni.lu.lts.vehicle.Vehicle;
 
 /**
@@ -35,6 +38,7 @@ public class LuxembourgTollSystem {
         this.accounts = new HashMap<>();
         this.recordedVehicles = new HashSet<>();
         this.accounts.put("root", AccountFactory.createAccount(Account.AccountType.ROOT, "root", "root"));
+        this.accounts.put("asiron", AccountFactory.createAccount(AccountType.REGULAR, "asiron", "bullshit"));
     }
 
     /**
@@ -60,6 +64,8 @@ public class LuxembourgTollSystem {
         if (account != null && account.checkPassword(password)) {
             System.out.println("Successfully logged in");
             return account;
+        } else {
+            System.out.println("Cannot log in");
         }
         return null;
     }
@@ -93,6 +99,11 @@ public class LuxembourgTollSystem {
         System.out.println("Successfully created account");
     }
     
+    public List<TollSystemRecord> fetchDataForVehicle(Vehicle vehicle) {
+        return null;
+        
+    }
+     
     public void start() {
         Scanner scanner = new Scanner(System.in);
         String line;
@@ -117,6 +128,12 @@ public class LuxembourgTollSystem {
                     break;
                 case "modify":
                     modifyCommand(tokens);
+                    break;
+                case "register":
+                    registerCommand(tokens);
+                    break;
+                case "vehicle":
+                    showVehicleCommmand(tokens);
                     break;
                 case "help":
                     helpCommand();
@@ -158,14 +175,64 @@ public class LuxembourgTollSystem {
             System.out.println("Cannot create accounts without permissions");
         }
     }
+      
+    private void registerCommand(String[] tokens) {
+        if (loggedIn != null &&
+            loggedIn.checkPermission(Permission.REGISTERVEHICLE))
+        {
+            String vehicleType = tokens[1];
+            String countryCode = tokens[2];
+            String numberPlate = tokens[3];
+            float vehHeight   = Float.parseFloat(tokens[4]);
+            
+            VehicleOwner vehicleOwner = (VehicleOwner) loggedIn;
+            
+            if (!vehicleOwner.registerVehicle(vehicleType, numberPlate, countryCode, vehHeight)) {
+                System.out.println("Couldn't register the vehicle");
+            } else {
+                System.out.println("Registered vehicle successfully");
+            }
+         
+        } else if (loggedIn != null && 
+            !loggedIn.checkPermission(Permission.REGISTERVEHICLE))
+        {
+            System.out.println("You don't have permission to do that");
+        } else if (loggedIn == null) {
+            System.out.println("You have to be logged in to do that");
+        }     
+    }
+    
+    private void showVehicleCommmand(String[] tokens) {
         
+        if (loggedIn != null &&
+            loggedIn.checkPermission(Permission.REGISTERVEHICLE))
+        {
+            VehicleOwner vehicleOwner = (VehicleOwner) loggedIn;
+            System.out.println("Vehicle: " + vehicleOwner.getVehicle().toString());
+        } else {
+            System.out.println("You don't have permission or you are not logged in");
+        }
+    }
     private void selectCommand(String[] tokens) {
-        
         
         if (loggedIn != null &&
             loggedIn.checkPermission(Permission.READONLYSELF))
         {
+            String selector = tokens[1];
+            if (selector.equals("me")) {
+                VehicleOwner vehicleOwner = (VehicleOwner) loggedIn;
+                List<TollSystemRecord> records = fetchDataForVehicle(vehicleOwner.getVehicle());
+                for (TollSystemRecord record : records) {
+                    System.out.println(record);
+                }
+            }
             
+        } else if (loggedIn != null &&
+                   loggedIn.checkPermission(Permission.READALL))
+        {
+            
+        } else {
+            System.out.println("You don't have permission or you are not logged in");
         }
     }
         
@@ -178,6 +245,7 @@ public class LuxembourgTollSystem {
                         + "login <username> <password> \t\t: to log into system\n"
                         + "logout                      \t\t: to log out from system\n"
                         + "create <type> <username> <password> \t: to create new account\n"
+                        + "vehicle                             \t: to display current registered vehicle\n"
                         + "select help                         \t: to display help about select from DB\n"
                         + "modify help                         \t: to display help about modifying DB\n"
                         + "help                                \t: to display this help\n");
@@ -186,4 +254,6 @@ public class LuxembourgTollSystem {
     private void unrecognizedCommand() {
         System.out.println("Unrecognized command, try \"help\" to display information");
     }
+
+
 }

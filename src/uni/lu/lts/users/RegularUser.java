@@ -4,10 +4,8 @@
  */
 package uni.lu.lts.users;
 
-import uni.lu.lts.util.CountryCode;
 import uni.lu.lts.vehicle.Vehicle;
 import uni.lu.lts.vehicle.VehicleFactory;
-import uni.lu.lts.vehicle.VehicleType;
 import uni.lu.lts.vehicle.special.SpecialVehicle;
 
 /**
@@ -21,15 +19,15 @@ public class RegularUser extends Account implements VehicleOwner {
     public RegularUser(AccountType type, String username, String password) {
         super(type, username, password);
         permissions.add(Permission.READONLYSELF);
+        permissions.add(Permission.REGISTERVEHICLE);
     }
     
-    
-    
     @Override
-    public boolean registerVehicle(VehicleType type, String numberPlate, CountryCode country, float height) {
+    public boolean registerVehicle(String type, String numberPlate, String country, float height) {
+           
         Vehicle vehicle = VehicleFactory.createVehicle(type, numberPlate, country, height);
         if (vehicle instanceof SpecialVehicle) {
-            System.out.print("Unable to register Special Vehicle for unprivileged user");
+            System.out.println("Unable to register Special Vehicle for unprivileged user");
             return false;
         }
         registeredVehicle = vehicle;
