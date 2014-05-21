@@ -6,8 +6,6 @@ package uni.lu.lts.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,9 +17,7 @@ import java.util.concurrent.locks.Lock;
 import uni.lu.lts.facility.Section;
 import uni.lu.lts.facility.TollFacility;
 import uni.lu.lts.facility.record.Record;
-import uni.lu.lts.facility.record.SensorReadingError;
 import uni.lu.lts.facility.record.TollSystemRecord;
-import uni.lu.lts.facility.sensor.Sensor;
 import uni.lu.lts.users.Account;
 import uni.lu.lts.users.Account.AccountType;
 import uni.lu.lts.users.AccountFactory;
@@ -126,7 +122,11 @@ public class LuxembourgTollSystem {
                             if (selector.equals("all")) {
                                 pulledRecords = new ArrayList<Record>(currentTF.getAllRecords());
                             } else {
-                                pulledRecords = new ArrayList<Record>(currentTF.getRecords().get(selector));
+                                List<TollSystemRecord> records = currentTF.getRecords().get(selector);
+                                if (records == null) {
+                                    break;
+                                }
+                                pulledRecords = new ArrayList<Record>(records);
                             }
                             break;
                         case "errors":
@@ -359,14 +359,18 @@ public class LuxembourgTollSystem {
             loggedIn.checkPermission(Permission.READONLYSELF))
         {
             switch (selector) {
-                case "my":     
+                case "my":
+                    if (!object.equals("tolls")) {
+                        System.out.println("You can only select \"tolls\" as regular user");
+                        break;
+                    }
                     printResults(fetchData(selector, object, sortBy, conditions));
                     break;
                 case "all":
                     System.out.println("You can't select \"all\" as regular user");
                     break;
                 default:
-                    System.out.println("only \"my\" or \"all\" are allowed for specifing quantity of selected objects");
+                    System.out.println("only \"my\" or \"all\" are allowed for specifing number plates");
                     break;
             }
             

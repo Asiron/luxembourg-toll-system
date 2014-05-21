@@ -80,9 +80,10 @@ public class TollSystemRecord extends Record {
     
     @Override
     public String toString() {
-        return "(" + timestamp + ", " + calculatedPrice + ", " 
-                + vehicleRef + " , " + zone.getFirst() + ", " + zone.getSecond() + " )"; 
+        return "( " + super.toString() + ", " + calculatedPrice + ", " + vehicleRef + " )"; 
     }
+    
+
     
     public static class TSRComparators {
 

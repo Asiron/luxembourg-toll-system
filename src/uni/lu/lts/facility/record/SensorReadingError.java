@@ -32,6 +32,12 @@ public class SensorReadingError extends Record {
         return errorType;
     }
 
+    @Override
+    public String toString() {
+        return "( " + super.toString() + errorType + ")"; 
+    }
+    
+    @Override
     public boolean checkConditions(String[] conditions) {
         for (String condition : conditions) {
             String[] operands = condition.split("=");

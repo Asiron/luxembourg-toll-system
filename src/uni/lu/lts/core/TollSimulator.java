@@ -56,13 +56,13 @@ public class TollSimulator extends Thread {
                 
                 if (displayOutput) System.out.println("Toll: " + randomVehicle);
             }
-            if (new Random().nextFloat() < 0.3) {
-                ltsLock.lock();
-                    Vehicle newVehicle = VehicleFactory.createRandomVehicle();
-                ltsLock.unlock();
-                
-                if (displayOutput) System.out.println("Created: " + newVehicle);
-            }
+//            if (new Random().nextFloat() < 0.3) {
+//                ltsLock.lock();
+//                    Vehicle newVehicle = VehicleFactory.createRandomVehicle();
+//                ltsLock.unlock();
+//                
+//                if (displayOutput) System.out.println("Created: " + newVehicle);
+//            }
         }
     }
     

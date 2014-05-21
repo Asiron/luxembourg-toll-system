@@ -114,7 +114,8 @@ public class Vehicle implements Comparable<Vehicle> {
             }
         }
         return true;
-    }    
+    }
+    
     public static class Comparators {
 
         public static Comparator<Vehicle> NUMBERPLATE = new Comparator<Vehicle>() {

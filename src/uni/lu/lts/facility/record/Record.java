@@ -54,7 +54,12 @@ public class Record implements Comparable<Record> {
     public int compareTo(Record o) {
         return Record.RecordComparators.DATE.compare(this, o);
     }
-       
+      
+    @Override
+    public String toString() {
+        return "(" + timestamp + ", " + zone + ", " + sensorID + ")"; 
+    }
+    
     public boolean checkConditions(String[] conditions) {
         return false;
     }
