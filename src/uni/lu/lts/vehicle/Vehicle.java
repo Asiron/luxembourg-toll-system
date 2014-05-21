@@ -1,9 +1,13 @@
 package uni.lu.lts.vehicle;
 
+import java.util.Comparator;
 import uni.lu.lts.facility.TollFacility;
 import uni.lu.lts.util.CountryCode;
 
-public class Vehicle {
+
+
+
+public class Vehicle implements Comparable<Vehicle> {
 
     private VehicleType vehicleType;
     private TollFacility latestPointPassed = null;		// reference to last toll facility that vehicle passed through
@@ -68,4 +72,49 @@ public class Vehicle {
         }
         return "(" + vehicleType + ", " + numberPlate + ", " + country + "(" + countryCode + "), " + height + ")";
     }
+
+    @Override
+    public int compareTo(Vehicle o) {
+        return Comparators.NUMBERPLATE.compare(this, o);
+    }
+            
+    public static class Comparators {
+
+        public static Comparator<Vehicle> NUMBERPLATE = new Comparator<Vehicle>() {
+            
+            @Override
+            public int compare(Vehicle o1, Vehicle o2) {
+                return o1.numberPlate.compareTo(o2.numberPlate);
+            }
+            
+        };
+        
+        public static Comparator<Vehicle> HEIGHT = new Comparator<Vehicle>() {
+            
+            @Override
+            public int compare(Vehicle o1, Vehicle o2) {
+                return (int)(o1.height - o2.height);
+            }
+              
+        };
+
+        public static Comparator<Vehicle> TYPE = new Comparator<Vehicle>() {
+            
+            @Override
+            public int compare(Vehicle o1, Vehicle o2) {
+                return o1.vehicleType.toString().compareTo(o2.vehicleType.toString());
+            }
+            
+        };
+        
+        public static Comparator<Vehicle> CONTRY = new Comparator<Vehicle>() {
+            
+            @Override
+            public int compare(Vehicle o1, Vehicle o2) {
+                return o1.country.toString().compareTo(o2.country.toString());
+            }
+           
+        };
+    }
+    
 }

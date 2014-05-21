@@ -13,7 +13,7 @@ import uni.lu.lts.vehicle.VehicleType;
  *
  * @author asiron
  */
-public class Section {
+public class Section implements Comparable<Section> {
    
     private String name;
     private Map<VehicleType, Float> prices;
@@ -79,5 +79,15 @@ public class Section {
      */
     public void setPrice(VehicleType type, Float newPrice) {
         prices.put(type, newPrice);
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public int compareTo(Section o) {
+        return name.compareTo(o.getName());
     }
 }

@@ -5,9 +5,9 @@
 package uni.lu.lts.facility.sensor;
 
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import uni.lu.lts.util.ImmutablePair;
 import uni.lu.lts.vehicle.Vehicle;
 import uni.lu.lts.vehicle.VehicleType;
@@ -29,7 +29,7 @@ public class Sensor {
         this.active = active;
         this.maxVehicleHeight = maxVehicleHeight;
         this.allowedTypes = allowedTypes;
-        this.passedByVehicleBuffer = new LinkedList<>();
+        this.passedByVehicleBuffer = new ConcurrentLinkedQueue<>();
     }
 
     /**

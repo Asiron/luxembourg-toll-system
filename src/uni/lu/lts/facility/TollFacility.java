@@ -23,7 +23,7 @@ import uni.lu.lts.vehicle.VehicleType;
  *
  * @author asiron
  */
-public class TollFacility {
+public class TollFacility implements Comparable<TollFacility> {
     
     private Section section;
     private String facilityID;
@@ -189,4 +189,13 @@ public class TollFacility {
         return retValue;
     }
 
+    @Override
+    public String toString() {
+        return facilityID;
+    }
+
+    @Override
+    public int compareTo(TollFacility o) {
+        return facilityID.compareTo(o.getFacilityID());
+    }
 }

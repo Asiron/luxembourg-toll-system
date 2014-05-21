@@ -4,6 +4,7 @@
  */
 package uni.lu.lts.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import uni.lu.lts.facility.Section;
+import uni.lu.lts.facility.TollFacility;
 import uni.lu.lts.facility.record.TollSystemRecord;
 import uni.lu.lts.users.Account;
 import uni.lu.lts.users.Account.AccountType;
@@ -99,9 +101,22 @@ public class LuxembourgTollSystem {
         System.out.println("Successfully created account");
     }
     
-    public List<TollSystemRecord> fetchDataForVehicle(Vehicle vehicle) {
-        return null;
-        
+    public List<TollSystemRecord> fetchAllDataForVehicle(String numberPlate) {
+        List<TollSystemRecord> data = new ArrayList<>();
+        ltsLock.lock();
+            for (Map.Entry<String, Section> entrySection : sections.entrySet()) {
+                Section currentSection = entrySection.getValue();
+                for (Map.Entry<String, TollFacility> entryTF: currentSection.getTollFacilities().entrySet()) {
+                    TollFacility currentTF = entryTF.getValue();
+                    currentTF.pullBuffersFromSensorQueues();
+                    List<TollSystemRecord> pulledRecords = currentTF.getRecords().get(numberPlate);
+                    if (pulledRecords != null) { 
+                        data.addAll(pulledRecords); 
+                    }
+                }
+            }
+        ltsLock.unlock();
+        return data;
     }
      
     public void start() {
@@ -221,7 +236,11 @@ public class LuxembourgTollSystem {
             String selector = tokens[1];
             if (selector.equals("me")) {
                 VehicleOwner vehicleOwner = (VehicleOwner) loggedIn;
-                List<TollSystemRecord> records = fetchDataForVehicle(vehicleOwner.getVehicle());
+                if (vehicleOwner.getVehicle() == null) {
+                    System.out.println("You have to register your vehicle!");
+                    return;
+                }
+                List<TollSystemRecord> records = fetchAllDataForVehicle(vehicleOwner.getVehicle().getNumberPlate());
                 for (TollSystemRecord record : records) {
                     System.out.println(record);
                 }
@@ -230,6 +249,7 @@ public class LuxembourgTollSystem {
         } else if (loggedIn != null &&
                    loggedIn.checkPermission(Permission.READALL))
         {
+            String selector = tokens[1];
             
         } else {
             System.out.println("You don't have permission or you are not logged in");

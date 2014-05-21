@@ -4,7 +4,7 @@
  */
 package uni.lu.lts.facility.record;
 
-import com.sun.org.glassfish.external.statistics.TimeStatistic;
+import java.util.Comparator;
 import java.util.Date;
 import uni.lu.lts.facility.Section;
 import uni.lu.lts.facility.TollFacility;
@@ -47,6 +47,29 @@ public class TollSystemRecord extends Record {
     @Override
     public String toString() {
         return "(" + timestamp + ", " + calculatedPrice + ", " 
-                + vehicleRef + ", " + zone.getFirst() + ", " + zone.getSecond(); 
+                + vehicleRef + " , " + zone.getFirst() + ", " + zone.getSecond() + " )"; 
     }
+    
+    public static class TSRComparators {
+
+        public static Comparator<TollSystemRecord> PRICE = new Comparator<TollSystemRecord>() {
+          
+            @Override
+            public int compare(TollSystemRecord o1, TollSystemRecord o2) {
+                return (int)(o1.getCalculatedPrice() - o2.getCalculatedPrice());
+            }
+           
+        };
+     
+        
+        public static Comparator<TollSystemRecord> VEHICLENUMBER = new Comparator<TollSystemRecord>() {
+          
+            @Override
+            public int compare(TollSystemRecord o1, TollSystemRecord o2) {
+                return o1.getVehicleRef().getNumberPlate().compareTo(o2.getVehicleRef().getNumberPlate());
+            }
+           
+        };
+    }
+    
  }

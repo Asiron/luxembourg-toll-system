@@ -19,16 +19,17 @@ import uni.lu.lts.vehicle.VehicleType;
  */
 public class TollSimulator extends Thread {
     
-    private boolean displayOutput = true;
+    private boolean displayOutput = false;
     
     private Lock ltsLock;
     private LuxembourgTollSystem database;
     
     private Vector<Sensor> allSensors;
     
-    public TollSimulator(Lock ltsLock, LuxembourgTollSystem database) {
+    public TollSimulator(Lock ltsLock, LuxembourgTollSystem database, boolean displayOutput) {
         this.database = database;
         this.ltsLock = ltsLock;
+        this.displayOutput = displayOutput;
         this.allSensors = new Vector<>();
     }
 
@@ -73,6 +74,9 @@ public class TollSimulator extends Thread {
             String newSectionName = RandomString.generateAlphaString(10);
             Section newSection    = new Section(newSectionName);
             database.getSections().put(newSectionName, newSection);
+            for (VehicleType type : VehicleType.values()) {
+                newSection.setPrice(type, (float)r.nextInt(20)+5);
+            }
             for (int j = 0; j < r.nextInt(9)+1; j++) {
                 String newFacilityName = RandomString.generateAlphaString(10);
                 TollFacility facility = new TollFacility(newSection, newFacilityName);

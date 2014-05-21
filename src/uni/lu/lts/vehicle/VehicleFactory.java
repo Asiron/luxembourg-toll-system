@@ -4,8 +4,9 @@
  */
 package uni.lu.lts.vehicle;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-import java.util.Vector;
 import uni.lu.lts.util.CountryCode;
 import uni.lu.lts.util.RandomString;
 import uni.lu.lts.vehicle.special.EmergencyCar;
@@ -18,7 +19,8 @@ import uni.lu.lts.vehicle.special.PoliceCar;
  */
 public class VehicleFactory {
     
-    private static Vector<Vehicle> createdVehicles = new Vector<>();
+    private static Random r = new Random();
+    private static Map<String, Vehicle> createdVehicles = new HashMap<>();
 
     public static Vehicle createVehicle(String type, String numberPlate, String country, float height) {
         VehicleType vehicleType = VehicleType.valueOf(type.toUpperCase());
@@ -63,9 +65,9 @@ public class VehicleFactory {
         
         if (returnVal != null) {
             if (createdVehicles == null) {
-                createdVehicles = new Vector<>();
+                createdVehicles = new HashMap<>();
             }
-            createdVehicles.add(returnVal);
+            createdVehicles.put(numberPlate, returnVal);
         }
         
         return returnVal;
@@ -73,8 +75,6 @@ public class VehicleFactory {
     
     public static Vehicle createRandomVehicle() {
         
-        Random r = new Random();
-
         Float vehicleHeight = new Float(1 + r.nextFloat() * 2.5);
         
         CountryCode country;
@@ -102,7 +102,7 @@ public class VehicleFactory {
         if (createdVehicles.isEmpty()) {
             VehicleFactory.createRandomVehicle();
         }
-        return createdVehicles.get(new Random().nextInt(createdVehicles.size()));
+        return (Vehicle) createdVehicles.values().toArray()[r.nextInt(createdVehicles.size())];
     }
     
     public static String getRandomNumberPlate() {
@@ -116,12 +116,11 @@ public class VehicleFactory {
         return numberPlates;
     }
     
+    public static Vehicle getVehicleByNumberPlate(String numberPlate) {
+        return createdVehicles.get(numberPlate);
+    }
+    
     private static boolean isUniqueNumberPlate(String numberPlate) {
-        for (Vehicle vehicle : VehicleFactory.createdVehicles) {
-            if (vehicle.getNumberPlate() != null && vehicle.getNumberPlate().equals(numberPlate)) {
-                return false;
-            }
-        }
-        return true;
+        return !createdVehicles.containsKey(numberPlate);
     }
 }
