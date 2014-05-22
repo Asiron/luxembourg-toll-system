@@ -4,8 +4,9 @@
  */
 package uni.lu.lts.vehicle;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import uni.lu.lts.util.CountryCode;
@@ -121,8 +122,8 @@ public class VehicleFactory {
         return createdVehicles.get(numberPlate);
     }
     
-    public static Collection<Vehicle> getAllVehicles() {
-        return createdVehicles.values();
+    public static List<Vehicle> getAllVehicles() {
+        return new ArrayList<Vehicle>(createdVehicles.values());
     }
     
     private static boolean isUniqueNumberPlate(String numberPlate) {

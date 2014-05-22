@@ -53,15 +53,22 @@ public class Account {
     }
     
     public String seePermissions() {
-        String retValue= "";
+        StringBuilder sb = new StringBuilder();
         for (Permission per : permissions) {
-            retValue = retValue + per.name() + "\n";
+            sb.append(per.name());
+            sb.append(" ");
         }
-        return retValue;
+        return sb.toString();
     }
     
     public AccountType getType() {
         return type;
+    }
+    
+    @Override
+    public String toString() {
+        return "( " + type + ", " + username + ", "
+                + seePermissions() + ")";
     }
     
     public static enum AccountType {

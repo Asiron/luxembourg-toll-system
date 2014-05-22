@@ -153,7 +153,7 @@ public class LuxembourgTollSystem {
     }
         
     public List<Vehicle> fetchVehicleData(String[] conditions) {
-        List<Vehicle> data = (List<Vehicle>) VehicleFactory.getAllVehicles();
+        List<Vehicle> data = VehicleFactory.getAllVehicles();
         
         Iterator<Vehicle> iter = data.iterator();
         while(iter.hasNext()) {
@@ -211,8 +211,12 @@ public class LuxembourgTollSystem {
         List<?> results = null;
         
         if (selector.equals("my")) {
-            String myNumberPlate = ((VehicleOwner)loggedIn).getVehicle().getNumberPlate();
-            results = fetchRecordDataForVehicle(myNumberPlate, dataType, conditions);
+            Vehicle myVehicle = ((VehicleOwner)loggedIn).getVehicle();
+            if (myVehicle == null) {
+                System.out.println("You didnt register your vehicle!");
+                return null;
+            }
+            results = fetchRecordDataForVehicle(myVehicle.getNumberPlate(), dataType, conditions);
         } else if (selector.equals("all")) {
             switch (dataType) {
                 case "errors": case "tolls":
@@ -254,6 +258,9 @@ public class LuxembourgTollSystem {
                     break;
                 case "create":
                     createCommand(tokens);
+                    break;
+                case "accounts":
+                    showAccounts(tokens);
                     break;
                 case "select":
                     selectCommand(tokens);
@@ -307,7 +314,24 @@ public class LuxembourgTollSystem {
             System.out.println("Cannot create accounts without permissions");
         }
     }
-      
+    
+    
+    private void showAccounts(String[] tokens) {
+        if (loggedIn != null &&
+            loggedIn.checkPermission(Permission.MODIFYACCOUNTS))
+        {
+            for (Account account : accounts.values()) {
+                System.out.println(account);
+            }
+        } else if (loggedIn == null &&
+                   !loggedIn.checkPermission(Permission.MODIFYACCOUNTS))
+        {
+             System.out.println("You don't have permission to do that");
+        } else {
+             System.out.println("You are not logged in");
+        }
+    }
+    
     private void registerCommand(String[] tokens) {
         if (loggedIn != null &&
             loggedIn.checkPermission(Permission.REGISTERVEHICLE))
@@ -384,7 +408,7 @@ public class LuxembourgTollSystem {
                     break;
             }
             
-        } else if (loggedIn != null &&
+        } else if (loggedIn != null ||
                    loggedIn.checkPermission(Permission.READALL))
         {
             printResults(fetchData(selector, object, sortBy, conditions));          
@@ -395,6 +419,27 @@ public class LuxembourgTollSystem {
         
     private void modifyCommand(String[] tokens) {
         
+        if (loggedIn != null &&
+            loggedIn.checkPermission(Permission.MODIFYACCOUNTS))
+        {
+            String username = tokens[1];
+            String newPwd   = tokens[2];
+            Account accountToModify = accounts.get(username);
+            if (accountToModify == null) {
+                System.out.println("Account does not exists");
+                return;
+            } else {
+                accountToModify.changePassword(newPwd);
+                System.out.println("Password changed successfully!");
+            }
+        } else if (loggedIn == null &&
+                   !loggedIn.checkPermission(Permission.MODIFYACCOUNTS))
+        {
+             System.out.println("You don't have permission to do that");
+        } else {
+             System.out.println("You are not logged in");
+        }
+        
     }  
 
     private void helpCommand() {
@@ -402,10 +447,11 @@ public class LuxembourgTollSystem {
                         + "login <username> <password> \t\t\t\t\t: to log into system\n"
                         + "logout                      \t\t\t\t\t: to log out from system\n"
                         + "create <type> <username> <password> \t\t\t\t: to create new account\n"
+                        + "accounts                      \t\t\t\t\t: to display list of accounts\n"
                         + "register <vehicle_type> <country_code> <number_plate> <height>  : to register a vehicle for user\n"
                         + "vehicle                             \t\t\t\t: to display current registered vehicle\n"
                         + "select help                         \t\t\t\t: to display help about select from DB\n"
-                        + "modify help                         \t\t\t\t: to display help about modifying DB\n"
+                        + "modify <username> <new_password> \t\t\t\t: to change password\n"
                         + "help                                \t\t\t\t: to display this help\n");
     }
 
@@ -449,4 +495,9 @@ public class LuxembourgTollSystem {
         System.out.println("\n\nExample:\n"
                 + "select my tolls sortby zone where");
     }
+
+    private void printModifyHelp() {
+        System.out.println("modify <username> <new_password>");
+    }
+
 }

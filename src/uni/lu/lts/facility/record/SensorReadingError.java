@@ -62,7 +62,7 @@ public class SensorReadingError extends Record {
                     }
                     break;
                 case "error":
-                    if(!errorType.toString().equals(rightOperand)) {
+                    if(!errorType.name().equals(rightOperand)) {
                         return false;
                     }
                     break;

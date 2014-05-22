@@ -87,7 +87,7 @@ public class Vehicle implements Comparable<Vehicle> {
             
             switch (leftOperand) {
                 case "type":
-                    if (!vehicleType.toString().equals(rightOperand)) {
+                    if (!vehicleType.name().equals(rightOperand)) {
                         return false;
                     }
                     break;
@@ -97,7 +97,7 @@ public class Vehicle implements Comparable<Vehicle> {
                     }
                     break;
                 case "country":
-                    if (!country.toString().equals(rightOperand)) {
+                    if (!country.name().equals(rightOperand)) {
                         return false;
                     }
                     break;
