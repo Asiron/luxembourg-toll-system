@@ -408,7 +408,7 @@ public class LuxembourgTollSystem {
                     break;
             }
             
-        } else if (loggedIn != null ||
+        } else if (loggedIn != null &&
                    loggedIn.checkPermission(Permission.READALL))
         {
             printResults(fetchData(selector, object, sortBy, conditions));          
@@ -487,8 +487,9 @@ public class LuxembourgTollSystem {
                         + "\tYou can put as many constraints as you want, separte them by space\n");
         System.out.println("select all <vehicles> sortby <plate|height|country|type> where <type|plate|country|height|latest>=<constraint>\n"
                         + "\tTo select vehicles sorted accordingly with constraints, latest stands for then name of the latest passing facility\n");
-        System.out.println("select all <sections> sortby <name> where <name|price>=<constraint>\n"
-                        + "\tTo select sections sorted by name, where name is matching or there exists price for a specific vehicle type\n");
+        System.out.println("select all <sections> sortby <name> where <name|price|tfnumber>=<constraint>\n"
+                        + "\tTo select sections sorted by name, where name is matching or there exists price for a specific vehicle type or\n"
+                        + "\tthe number of toll facilities for this section has to match\n");
         System.out.println("select all <tfs> sortby <name> where <name|section|sensorNumber>=<constraint>\n"
                         + "\tTo select tollfacilities sorted by <name> where name or section it is in are matching or it has a right number of sensor inside\n");
         

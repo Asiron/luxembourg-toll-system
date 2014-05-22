@@ -211,8 +211,9 @@ public class TollFacility implements Comparable<TollFacility> {
                         return false;
                     }
                     break;
-                case "sensorNumber":
+                case "sensornumber":
                     if (sensors.size() != Integer.parseInt(rightOperand)) {
+                        
                         return false;
                     }
                     break;

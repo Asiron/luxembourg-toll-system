@@ -113,6 +113,11 @@ public class Section implements Comparable<Section> {
                         return false;
                     }
                     break;
+                case "tfnumber":
+                    if (tollFacilities.size() != Integer.parseInt(rightOperand)) {
+                        return false;
+                    }
+                    break;
             }
         }
         return true;

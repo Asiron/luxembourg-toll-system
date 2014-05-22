@@ -83,8 +83,6 @@ public class TollSystemRecord extends Record {
         return "( " + super.toString() + ", " + calculatedPrice + ", " + vehicleRef + " )"; 
     }
     
-
-    
     public static class TSRComparators {
 
         public static Comparator<TollSystemRecord> PRICE = new Comparator<TollSystemRecord>() {
