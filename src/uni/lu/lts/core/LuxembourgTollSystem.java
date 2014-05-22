@@ -46,6 +46,7 @@ public class LuxembourgTollSystem {
         this.recordedVehicles = new HashSet<>();
         this.accounts.put("root", AccountFactory.createAccount(Account.AccountType.ROOT, "root", "root"));
         this.accounts.put("asiron", AccountFactory.createAccount(AccountType.REGULAR, "asiron", "bullshit"));
+        this.accounts.put("leo", AccountFactory.createAccount(AccountType.PRIVILEGED, "leo", "bullshit"));
     }
 
     /**
@@ -168,7 +169,7 @@ public class LuxembourgTollSystem {
  
     public List<Section> fetchSectionData(String[] conditions) {
         ltsLock.lock();
-            List<Section> data = (List<Section>) sections.values();
+            List<Section> data = new ArrayList<Section>(sections.values());
         ltsLock.unlock();
         
         Iterator<Section> iter = data.iterator();
@@ -346,6 +347,16 @@ public class LuxembourgTollSystem {
     }
     
     private void selectCommand(String[] tokens) {
+
+        if (tokens[1].equals("help")) {
+            printSelectHelp();
+            return;
+        }
+        
+        if (tokens.length < 6) {
+            System.out.println("Illegal number of tokens, at least e.g. \"select all tolls sortby zone where\"");
+            return;
+        }
         
             String selector  = tokens[1];
             String object    = tokens[2];
@@ -354,6 +365,8 @@ public class LuxembourgTollSystem {
             String wantsCond = tokens[5];
             
             String[] conditions = Arrays.copyOfRange(tokens, 6, tokens.length);
+        
+
             
         if (loggedIn != null &&
             loggedIn.checkPermission(Permission.READONLYSELF))
@@ -366,11 +379,8 @@ public class LuxembourgTollSystem {
                     }
                     printResults(fetchData(selector, object, sortBy, conditions));
                     break;
-                case "all":
-                    System.out.println("You can't select \"all\" as regular user");
-                    break;
                 default:
-                    System.out.println("only \"my\" or \"all\" are allowed for specifing number plates");
+                    System.out.println("You don't have permission to do that");
                     break;
             }
             
@@ -389,13 +399,14 @@ public class LuxembourgTollSystem {
 
     private void helpCommand() {
         System.out.printf("Usage:\n"
-                        + "login <username> <password> \t\t: to log into system\n"
-                        + "logout                      \t\t: to log out from system\n"
-                        + "create <type> <username> <password> \t: to create new account\n"
-                        + "vehicle                             \t: to display current registered vehicle\n"
-                        + "select help                         \t: to display help about select from DB\n"
-                        + "modify help                         \t: to display help about modifying DB\n"
-                        + "help                                \t: to display this help\n");
+                        + "login <username> <password> \t\t\t\t\t: to log into system\n"
+                        + "logout                      \t\t\t\t\t: to log out from system\n"
+                        + "create <type> <username> <password> \t\t\t\t: to create new account\n"
+                        + "register <vehicle_type> <country_code> <number_plate> <height>  : to register a vehicle for user\n"
+                        + "vehicle                             \t\t\t\t: to display current registered vehicle\n"
+                        + "select help                         \t\t\t\t: to display help about select from DB\n"
+                        + "modify help                         \t\t\t\t: to display help about modifying DB\n"
+                        + "help                                \t\t\t\t: to display this help\n");
     }
 
     private void unrecognizedCommand() {
@@ -403,10 +414,39 @@ public class LuxembourgTollSystem {
     }
 
     private void printResults(List<?> results) {
+        
+        if (results == null) {
+            return;
+        }
+        
         int i = 1;
         for (Object object : results) {
             System.out.println(i + " " +object);
             i++;
         }
+    }
+
+    private void printSelectHelp() {
+        System.out.printf("Usage:\n"
+                        + "select <my|all|(numberPlate)> <tolls> sortby <plate|price|date|zone> where <section|facility|date|price>=<constraint> \n"
+                        + "\tTo select tolls for myself, all or for specific number plate,\n"
+                        + "\tbe careful with permissions, normal user can't read information\n"
+                        + "\tabout other users so only use \"all\" or (numberPlate) if you are logged as privileged user\n"
+                        + "\tQuery will return tolls sorted by plate number, price, date or zone and contraint them with section name,\n"
+                        + "\tfacility name, date or price, only those which match will be returned\n");
+        System.out.printf("select all <errors> sortby <plate|price|date|zone> where <section|facility|date|error>=<constraint>\n"
+                        + "\tTo select errors, if you put \"my\" or specific number plate, it will be omitted,\n"
+                        + "\tyou need permission to read all for this select\n"
+                        + "\tQuery will be sorted accordingly and will return only matching records.\n"
+                        + "\tYou can put as many constraints as you want, separte them by space\n");
+        System.out.println("select all <vehicles> sortby <plate|height|country|type> where <type|plate|country|height|latest>=<constraint>\n"
+                        + "\tTo select vehicles sorted accordingly with constraints, latest stands for then name of the latest passing facility\n");
+        System.out.println("select all <sections> sortby <name> where <name|price>=<constraint>\n"
+                        + "\tTo select sections sorted by name, where name is matching or there exists price for a specific vehicle type\n");
+        System.out.println("select all <tfs> sortby <name> where <name|section|sensorNumber>=<constraint>\n"
+                        + "\tTo select tollfacilities sorted by <name> where name or section it is in are matching or it has a right number of sensor inside\n");
+        
+        System.out.println("\n\nExample:\n"
+                + "select my tolls sortby zone where");
     }
 }

@@ -83,7 +83,12 @@ public class Section implements Comparable<Section> {
 
     @Override
     public String toString() {
-        return name;
+        StringBuilder sb = new StringBuilder();
+        for (TollFacility tf  : tollFacilities.values()) {
+            sb.append(tf.getFacilityID());
+            sb.append(" ");
+        }
+        return name + " -> " + sb.toString();
     }
 
     @Override
@@ -95,7 +100,7 @@ public class Section implements Comparable<Section> {
         for (String condition : conditions) {
             String[] operands = condition.split("=");
             String leftOperand  = operands[0].toLowerCase();
-            String rightOperand = operands[1];
+            String rightOperand = operands[1].toUpperCase();
             
             switch (leftOperand) {
                 case "name":

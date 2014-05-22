@@ -83,7 +83,7 @@ public class Vehicle implements Comparable<Vehicle> {
         for (String condition : conditions) {
             String[] operands = condition.split("=");
             String leftOperand  = operands[0].toLowerCase();
-            String rightOperand = operands[1];
+            String rightOperand = operands[1].toUpperCase();
             
             switch (leftOperand) {
                 case "type":

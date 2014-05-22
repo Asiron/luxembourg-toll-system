@@ -21,11 +21,11 @@ public class CollectionsUtil {
        
     public static List<?> sortBy(List<?> results, String sortBy) {
         
-        if (results == null || results.size() <= 1) {
+        if (results == null || results.size() < 1) {
             return null;
         }
         
-        if (sortBy == null) {
+        if (sortBy == null || results.size() == 1) {
             return results;
         }
         
