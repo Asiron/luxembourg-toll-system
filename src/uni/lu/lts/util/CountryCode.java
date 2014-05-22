@@ -66,7 +66,8 @@ public enum CountryCode {
     TR	("Turkey"),
     UA	("Ukraine"),
     UK	("United"),
-    V	("Vatican");
+    V	("Vatican"),
+    UNKNOWN ("Unknown");
 
     private final String fullname;
 

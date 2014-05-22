@@ -83,14 +83,10 @@ public class VehicleFactory {
         String numberPlates;
         VehicleType vehicleType;
         
-        if (r.nextFloat() < 0.1) {
-            country = null;
-        } else {
-            country = CountryCode.randomCountry();
-        }
+        country = CountryCode.randomCountry();
         
         if (r.nextFloat() < 0.1) {
-            numberPlates = null;
+            numberPlates = "UNNOWN";
         } else {
             numberPlates = VehicleFactory.getRandomNumberPlate();     
         }

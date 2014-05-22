@@ -15,6 +15,7 @@ import uni.lu.lts.facility.record.TollSystemRecord;
 import uni.lu.lts.facility.sensor.ErrorType;
 import uni.lu.lts.facility.sensor.Image;
 import uni.lu.lts.facility.sensor.Sensor;
+import uni.lu.lts.util.CountryCode;
 import uni.lu.lts.util.ImmutablePair;
 import uni.lu.lts.vehicle.Vehicle;
 import uni.lu.lts.vehicle.VehicleType;
@@ -178,10 +179,10 @@ public class TollFacility implements Comparable<TollFacility> {
         } else if (maxVehicleHeight < reading.getFirst().getHeight()) {
             // vehicle's height surpassing limit
             retValue = ErrorType.VEHHEIGHTSURPASSES;
-        } else if (reading.getFirst().getCountry() == null) {
+        } else if (reading.getFirst().getCountry() == CountryCode.UNKNOWN) {
             // country unspecified
             retValue = ErrorType.UNKNOWNCOUNTRY;
-        } else if (reading.getFirst().getNumberPlate() == null) {
+        } else if (reading.getFirst().getNumberPlate() == "UNKNOWN") {
             // license plate unspecified
             retValue = ErrorType.UNKNOWNPLATES;
         }

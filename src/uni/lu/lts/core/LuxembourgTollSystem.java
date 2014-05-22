@@ -323,7 +323,7 @@ public class LuxembourgTollSystem {
             for (Account account : accounts.values()) {
                 System.out.println(account);
             }
-        } else if (loggedIn == null &&
+        } else if (loggedIn != null &&
                    !loggedIn.checkPermission(Permission.MODIFYACCOUNTS))
         {
              System.out.println("You don't have permission to do that");
@@ -494,7 +494,8 @@ public class LuxembourgTollSystem {
                         + "\tTo select tollfacilities sorted by <name> where name or section it is in are matching or it has a right number of sensor inside\n");
         
         System.out.println("\n\nExample:\n"
-                + "select my tolls sortby zone where");
+                + "select my tolls sortby zone where\n"
+                + "select all vehicles sortby plate where type=motorbike country=e");
     }
 
     private void printModifyHelp() {
