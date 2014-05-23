@@ -57,7 +57,7 @@ public class Record implements Comparable<Record> {
       
     @Override
     public String toString() {
-        return "(" + timestamp + ", " + zone + ", " + sensorID + ")"; 
+        return "(" + timestamp + ", " + zone.getFirst().getName() + ", " + zone.getSecond().getFacilityID() + ", " + sensorID + ")"; 
     }
     
     public boolean checkConditions(String[] conditions) {

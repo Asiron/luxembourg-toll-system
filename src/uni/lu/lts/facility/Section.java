@@ -85,10 +85,16 @@ public class Section implements Comparable<Section> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (TollFacility tf  : tollFacilities.values()) {
-            sb.append(tf.getFacilityID());
-            sb.append(" ");
+            sb.append(tf.getFacilityID()).append(" ");
         }
-        return name + " -> " + sb.toString();
+        sb.append("\n\tPrices: ");
+        for (Map.Entry<VehicleType, Float> entry : prices.entrySet()) {
+            String vehicleType = entry.getKey().toString();
+            Float price = entry.getValue();
+            sb.append(vehicleType).append(" -> ").append(price).append(" ");
+        }
+        
+        return "Section: " + name + " -> TollFacilities: " + sb.toString();
     }
 
     @Override

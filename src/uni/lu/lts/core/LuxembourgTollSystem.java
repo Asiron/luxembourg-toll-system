@@ -116,10 +116,10 @@ public class LuxembourgTollSystem {
                     TollFacility currentTF = entryTF.getValue();
                     
                     List<Record> pulledRecords = null;
-                    
+                    currentTF.pullBuffersFromSensorQueues();
+            
                     switch (dataType) {
                         case "tolls":
-                            currentTF.pullBuffersFromSensorQueues();
                             if (selector.equals("all")) {
                                 pulledRecords = new ArrayList<Record>(currentTF.getAllRecords());
                             } else {
@@ -364,7 +364,13 @@ public class LuxembourgTollSystem {
             loggedIn.checkPermission(Permission.REGISTERVEHICLE))
         {
             VehicleOwner vehicleOwner = (VehicleOwner) loggedIn;
-            System.out.println("Vehicle: " + vehicleOwner.getVehicle().toString());
+            
+            if (vehicleOwner.getVehicle() != null) {
+                System.out.println("Vehicle: " + vehicleOwner.getVehicle().toString());
+            } else {
+                System.out.println("You didn't register a vehicle!");
+            }
+            
         } else {
             System.out.println("You don't have permission or you are not logged in");
         }
